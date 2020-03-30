@@ -92,6 +92,7 @@ def writeIndex():
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="theme.css">
+<button class="lobby-btn" onclick="window.location.href = 'http://geoscents.net';">Back to Game</button>
 <button class="room-btn" onclick="window.location.href = 'World.html';">World</button>
 <button class="room-btn" onclick="window.location.href = 'Trivia.html';">Trivia</button>
 <button class="room-btn" onclick="window.location.href = 'Europe.html';">Europe</button>
@@ -101,7 +102,9 @@ def writeIndex():
 <button class="room-btn" onclick="window.location.href = 'NAmerica.html';">N. America</button>
 <button class="room-btn" onclick="window.location.href = 'SAmerica.html';">S. America</button>
 <h1>Choose a map from above to view a data table!</h1>
-
+NOTE: distance data was collected for a while before lat/lon data started getting collected. This is why the histograms show more data points than the animations.
+<br>
+Raw data can be found <a href="https://github.com/mattfel1/geoscents_stats">here</a>
 """)
 
 def writeCss():
@@ -123,6 +126,23 @@ def writeCss():
     background: linear-gradient(to bottom,  #a9e7f9 0%,#77d3ef 4%,#05abe0 100%);
     border-radius: 2px;
     box-shadow: 0 0 4px rgba(0,0,0,0.3);
+}
+
+.lobby-btn {
+	cursor: pointer;
+	border: 1px solid #333;
+	padding: 2px 2px;
+	margin: 3px 3px;
+	font-size: 16px;
+	background: #ffcccc; /* fallback */
+	background: -moz-linear-gradient(top,  #ffcccc 0%, #ff9999 4%, #ff6666 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffcccc), color-stop(4%,#ff9999), color-stop(100%,#ff6666));
+	background: -webkit-linear-gradient(top,  #ffcccc 0%,#ff9999 4%,#ff6666 100%);
+	background: -o-linear-gradient(top,  #ffcccc 0%,#ff9999 4%,#ff6666 100%);
+	background: -ms-linear-gradient(top,  #ffcccc 0%,#ff9999 4%,#ff6666 100%);
+	background: linear-gradient(to bottom,  #ffcccc 0%,#ff9999 4%,#ff6666 100%);
+	border-radius: 2px;
+	box-shadow: 0 0 4px rgba(0,0,0,0.3);
 }
 
 .special-room-btn {
@@ -246,6 +266,7 @@ def writeHtml(continent):
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="theme.css">
+<button class="lobby-btn" onclick="window.location.href = 'http://geoscents.net';">Back to Game</button>
 <button class="%sroom-btn" onclick="window.location.href = 'World.html';">World</button>
 <button class="%sroom-btn" onclick="window.location.href = 'Trivia.html';">Trivia</button>
 <button class="%sroom-btn" onclick="window.location.href = 'Europe.html';">Europe</button>
