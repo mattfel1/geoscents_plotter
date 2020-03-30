@@ -1,3 +1,3 @@
 #!/bin/bash
-
-rsync -avzh /plots/* geoscents.net:~/visualization/
+# $1 = base directory with data
+rsync -avzh $1/plots/* geoscents.net:~/visualization/

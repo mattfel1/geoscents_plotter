@@ -286,9 +286,9 @@ def writeHtml(continent):
 
 
 def nextColor(color_idx, num_colors):
-    g = (1 + np.cos(color_idx * 11 / num_colors * 2 * np.pi)) / 2.0
-    r = (1 + np.cos((color_idx * 11 + num_colors / 3) / num_colors * 2 * np.pi)) / 2.0
-    b = (1 + np.cos((color_idx * 11 + 2 * num_colors / 3) / num_colors * 2 * np.pi)) / 2.0
+    g = (1 + np.cos(color_idx * 4 / num_colors * 2 * np.pi)) / 2.0
+    r = (1 + np.cos((color_idx * 4 + num_colors / 3) / num_colors * 2 * np.pi)) / 2.0
+    b = (1 + np.cos((color_idx * 4 + 2 * num_colors / 3) / num_colors * 2 * np.pi)) / 2.0
     return (r,g,b,0.75)
 
 
@@ -301,9 +301,8 @@ writeIndex()
 writeCss()
 
 print('Output dir = %s' % (outdir_prefix + '/plots/'))
-player_country_colors = {}
 admin_to_country = {}
-num_colors = 30.
+num_colors = 31.
 color_idx = 0
 dpi = 250
 
@@ -409,6 +408,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 plt.scatter([true_x], [true_y], marker='*', color='w', s = 30, edgecolors = 'black')
                 frame = 0
                 legend_countries = []
+                player_country_colors = {}
                 patchList = []
                 for c in player_countries:
                     if (c not in player_country_colors):
@@ -433,14 +433,14 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                         color = player_country_colors[frame_player_countries[i]]
                         plt.scatter([x],[y], color = color, s = 4)
 
-                    time = plt.text(0, 60,str(frame_ctr),fontsize=16)
+                    time = plt.text(0, 60,str(frame_ctr),fontsize=12)
                     plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
                     frame = frame + 1
                     time.set_visible(False)
                 # make final frame
                 rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#ffad99',facecolor='#ffad99')
                 ax.add_patch(rect)
-                plt.text(0, 60,0,fontsize=16)
+                plt.text(0, 60,0,fontsize=12)
                 for i in range(final_frames):
                     plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
                     frame = frame + 1
@@ -483,9 +483,9 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     fname = stripSpecial(fname.replace(' ','-').replace('/','-'))
                     plt.savefig(outdir_prefix + '/plots/' + fname, optimize=True)
                     plt.clf()
-                    reghist = '<a href=\\"%s\\"><img src=\\"%s\\" height=60px></a>' % (fname, fname)
+                    reghist = '<a href=\\"%s\\"><img src=\\"%s\\" height=40px></a>' % (fname, fname)
                     anim_name = 'animation_' + continent + '_' + aggregate_name
-                    anim = '<a href=\\"%s\\"><img src=\\"%s\\" height = 60px></a>' % (anim_name + '.gif', anim_name + '.gif')
+                    anim = '<a href=\\"%s\\"><img src=\\"%s\\" height = 40px></a>' % (anim_name + '.gif', anim_name + '.gif')
                     link = "https://en.wikipedia.org/wiki/Special:Search?search=" + aggregate_name + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
                     if (aggregate_name in admin_to_country):
                         linkedAdmin = '<a href=\\"%s\\">%s</a>' % (link, admin)  
