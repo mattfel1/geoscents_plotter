@@ -375,7 +375,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     aggregate_lats[aggregate_name] = lats
                     aggregate_times[aggregate_name] = times
                     aggregate_player_countries[aggregate_name] = player_countries
-                timestep = 0.5
+                timestep = 0.25
                 final_frames = 1
                 plt.figure(figsize=(MAP_WIDTH/dpi, MAP_HEIGHT/dpi), dpi=dpi)
                 plt.imshow(continent_map)
@@ -428,7 +428,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 fp_out = outdir_prefix + "/plots/" + anim_name + ".gif"
                 img, *imgs = [Image.open(f) for f in sorted(glob.glob(fp_in))]
                 img.save(fp=fp_out, format='GIF', append_images=imgs,
-                         save_all=True, duration=500, loop=1)
+                         save_all=True, duration=timestep*1000, loop=1)
                 plt.clf()
                 plt.close()
             except Exception as e: # work on python 3.x
@@ -529,7 +529,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     fp_out = outdir_prefix + "/plots/" + anim_name + ".gif"
                     img, *imgs = [Image.open(f) for f in sorted(glob.glob(fp_in))]
                     img.save(fp=fp_out, format='GIF', append_images=imgs,
-                             save_all=True, duration=500, loop=1)
+                             save_all=True, duration=timestep*1000, loop=1)
                     plt.clf()
                     plt.close()
 
