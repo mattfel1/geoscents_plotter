@@ -375,7 +375,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     aggregate_lats[aggregate_name] = lats
                     aggregate_times[aggregate_name] = times
                     aggregate_player_countries[aggregate_name] = player_countries
-                timestep = 0.25
+                timestep = 0.5
                 final_frames = 1
                 plt.figure(figsize=(MAP_WIDTH/dpi, MAP_HEIGHT/dpi), dpi=dpi)
                 plt.imshow(continent_map)
