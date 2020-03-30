@@ -460,7 +460,10 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
 
         # Add aggregate for each country
         if (continent != "Trivia"): 
+            entry_id = 0
             for aggregate_name in aggregate_dists:
+                print('%s: (%d / %d): %s' % (continent, entry_id, len(aggregate_dists), aggregate_name))
+                entry_id = entry_id + 1
                 try:
                     if (aggregate_name in admin_to_country):
                         country = admin_to_country[aggregate_name]
