@@ -374,7 +374,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 addJs('"Entry","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
 
                 # Generate animation
-                fileList = glob.glob(outdir_prefix + '/plots/raw_animation' + continent + '*')
+                fileList = glob.glob(outdir_prefix + '/plots/raw_animation_' + continent + '*')
                 for filePath in fileList:
                     os.remove(filePath)
                 lats = data[entry]['lats']
@@ -496,7 +496,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     addJs('"Aggregate","' + linkedCountry + '","' + linkedAdmin + '","-","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
         
                     # Generate animation
-                    fileList = glob.glob(outdir_prefix + '/plots/raw_animation' + continent + '*')
+                    fileList = glob.glob(outdir_prefix + '/plots/raw_animation_' + continent + '*')
                     for filePath in fileList:
                         os.remove(filePath)
                     lats = aggregate_lats[aggregate_name]
