@@ -300,7 +300,7 @@ pathlist = Path('.').glob('**/*.json')
 writeIndex()
 writeCss()
 
-print('Output dir = %s' % (outdir_prefix + outdir_prefix + '/plots/'))
+print('Output dir = %s' % (outdir_prefix + '/plots/'))
 player_country_colors = {}
 admin_to_country = {}
 num_colors = 30.
