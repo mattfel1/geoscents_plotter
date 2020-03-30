@@ -173,12 +173,13 @@ $(document).ready(function() {
     $("#all").css("background","yellow");
     const table = $('#%s').DataTable( {
         data: dataSet,
-        "lengthChange": false,
-        "pageLength": 9999,
+        "lengthChange": true,
+        "pageLength": 50,
         "search": {
             "search": ".*",
             "regex": true
         },
+        "dom": '<"top"f>rt<"bottom"ipl><"clear">',
         deferRender:    true,
         "order": [[5, 'asc']],
         columns: [
@@ -226,7 +227,8 @@ def trackAdmin(country):
     return country == 'United States' or country == 'Canada' or country == 'China' or country == 'India' or country == 'Brazil' or country == 'Russia' or country == 'Australia' or country == 'Indonesia'
 
 def stripSpecial(x):
-    return re.sub(r'[^\x00-\x7F]','x', x)
+    # return re.sub(r'[^\x00-\x7F]','x', x)
+    return re.sub(r'[^A-Za-z0-9\(\),. ]+','_',x)
 
 def writeHtml(continent):
     with open("/plots/" + continent + '.html', 'w+') as f:
@@ -277,14 +279,16 @@ pathlist = Path('.').glob('**/*.json')
 writeIndex()
 writeCss()
 
+outdir_prefix = '/home/mattfel/'
+print('Output dir = %s' % (outdir_prefix + '/plots/'))
 player_country_colors = {}
 admin_to_country = {}
 num_colors = 30.
 color_idx = 0
-dpi = 200
+dpi = 250
 
-
-for path in pathlist:
+mapFilter = '' if (sys.argv) == 1 else sys.argv[1]
+for path in [x for x in pathlist if mapFilter in x]:
     # because path is object not string
     file = str(path)
     continent = file.replace('.json','')
@@ -343,8 +347,8 @@ for path in pathlist:
                 # Save entry in table
                 anim_name = 'animation_' + continent + '_' + country + '_' + stripSpecial(entry.replace(' ','-').replace('/','-'))
                 admin = "N/A" if 'admin' not in data[entry] else data[entry]['admin']
-                reghist = '<a href=\\"%s\\"><img src=\\"%s\\" height=60px></a>' % (fname, fname)
-                anim = '<a href=\\"%s\\"><img src=\\"%s\\" height = 60px></a>' % (anim_name + '.gif', anim_name + '.gif')
+                reghist = '<a href=\\"%s\\"><img src=\\"%s\\" height=40px></a>' % (fname, fname)
+                anim = '<a href=\\"%s\\"><img src=\\"%s\\" height = 40px></a>' % (anim_name + '.gif', anim_name + '.gif')
                 link = "https://en.wikipedia.org/wiki/Special:Search?search=" + stripSpecial(entry) + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
                 linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, stripSpecial(data[entry]['city'])) 
                 addJs('"Entry","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
@@ -372,8 +376,8 @@ for path in pathlist:
                     aggregate_lats[aggregate_name] = lats
                     aggregate_times[aggregate_name] = times
                     aggregate_player_countries[aggregate_name] = player_countries
-                timestep = 0.25
-                final_frames = 30
+                timestep = 0.5
+                final_frames = 1
                 plt.figure(figsize=(MAP_WIDTH/dpi, MAP_HEIGHT/dpi), dpi=dpi)
                 plt.imshow(continent_map)
                 ax = plt.gca()
@@ -382,7 +386,7 @@ for path in pathlist:
                 plt.title(entry)
                 plt.axis('off')
                 true_x, true_y = (0,0) if "true_lat" not in data[entry] else geoToMerc(continent, data[entry]["true_lat"], data[entry]["true_lon"]) 
-                plt.scatter([true_x], [true_y], marker='*', color='w', s = 60, edgecolors = 'black')
+                plt.scatter([true_x], [true_y], marker='*', color='w', s = 30, edgecolors = 'black')
                 frame = 0
                 legend_countries = []
                 patchList = []
@@ -396,6 +400,8 @@ for path in pathlist:
                         patchList.append(dk)
                 # lines = [Line2D([0], [0], color=c, linewidth=3, linestyle='--') for c in colors]
                 plt.legend(handles=patchList, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=4)
+                rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#17eb5e',facecolor='#17eb5e')
+                ax.add_patch(rect)                
                 for t in np.arange(10, 0, -timestep):
                     lowerbound = t - timestep
                     frame_lats = [x for x,stamp in zip(lats, times) if stamp > lowerbound and stamp <= t]
@@ -405,17 +411,16 @@ for path in pathlist:
                     for i in range(len(frame_lats)):
                         x,y = geoToMerc(continent, float(frame_lats[i]), float(frame_lons[i]))
                         color = player_country_colors[frame_player_countries[i]]
-                        plt.scatter([x],[y], color = color, s = 5)
-                    rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#17eb5e',facecolor='#17eb5e')
-                    ax.add_patch(rect)
-                    time = plt.text(0, 60,str(frame_ctr),fontsize=20)
+                        plt.scatter([x],[y], color = color, s = 4)
+
+                    time = plt.text(0, 60,str(frame_ctr),fontsize=16)
                     plt.savefig('/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
                     frame = frame + 1
                     time.set_visible(False)
                 # make final frame
                 rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#ffad99',facecolor='#ffad99')
                 ax.add_patch(rect)
-                plt.text(0, 60,0,fontsize=20)
+                plt.text(0, 60,0,fontsize=16)
                 for i in range(final_frames):
                     plt.savefig('/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
                     frame = frame + 1
@@ -424,7 +429,7 @@ for path in pathlist:
                 fp_out = "/plots/" + anim_name + ".gif"
                 img, *imgs = [Image.open(f) for f in sorted(glob.glob(fp_in))]
                 img.save(fp=fp_out, format='GIF', append_images=imgs,
-                         save_all=True, duration=250, loop=0)
+                         save_all=True, duration=500, loop=1)
                 plt.clf()
                 plt.close()
             except Exception as e: # work on python 3.x
@@ -497,6 +502,8 @@ for path in pathlist:
                             patchList.append(dk)
                     # lines = [Line2D([0], [0], color=c, linewidth=3, linestyle='--') for c in colors]
                     plt.legend(handles=patchList, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=4)
+                    rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#17eb5e',facecolor='#17eb5e')
+                    ax.add_patch(rect)
                     for t in np.arange(10, 0, -timestep):
                         lowerbound = t - timestep
                         frame_lats = [x for x,stamp in zip(lats, times) if stamp > lowerbound and stamp <= t]
@@ -506,9 +513,7 @@ for path in pathlist:
                         for i in range(len(frame_lats)):
                             x,y = geoToMerc(continent, float(frame_lats[i]), float(frame_lons[i]))
                             color = player_country_colors[frame_player_countries[i]]
-                            plt.scatter([x],[y], color = color, s = 5)
-                        rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#17eb5e',facecolor='#17eb5e')
-                        ax.add_patch(rect)
+                            plt.scatter([x],[y], color = color, s = 4)
                         time = plt.text(0, 60,str(frame_ctr),fontsize=20)
                         plt.savefig('/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
                         frame = frame + 1
@@ -525,7 +530,7 @@ for path in pathlist:
                     fp_out = "/plots/" + anim_name + ".gif"
                     img, *imgs = [Image.open(f) for f in sorted(glob.glob(fp_in))]
                     img.save(fp=fp_out, format='GIF', append_images=imgs,
-                             save_all=True, duration=250, loop=0)
+                             save_all=True, duration=500, loop=1)
                     plt.clf()
                     plt.close()
 
