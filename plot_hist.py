@@ -287,7 +287,7 @@ color_idx = 0
 dpi = 250
 
 mapFilter = '' if (sys.argv) == 1 else sys.argv[1]
-for path in [x for x in pathlist if mapFilter in x]:
+for path in [x for x in pathlist if mapFilter in str(x)]:
     # because path is object not string
     file = str(path)
     continent = file.replace('.json','')
