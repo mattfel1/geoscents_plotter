@@ -18,7 +18,7 @@ from PIL import Image
 
 MAP_WIDTH = 1530
 MAP_HEIGHT = 900
-outdir_prefix = '/home/mattfel/'
+outdir_prefix = '/'
 
 def geoToMerc(room,lat,lon):
     if (room == "World"):
@@ -286,7 +286,7 @@ def writeHtml(continent):
 
 
 def nextColor(color_idx, num_colors):
-    spread = 7
+    spread = 11
     g = (1 + np.cos(color_idx * spread / num_colors * 2 * np.pi)) / 2.0
     r = (1 + np.cos((color_idx * spread + num_colors / 3) / num_colors * 2 * np.pi)) / 2.0
     b = (1 + np.cos((color_idx * spread + 2 * num_colors / 3) / num_colors * 2 * np.pi)) / 2.0
@@ -303,7 +303,7 @@ writeCss()
 
 print('Output dir = %s' % (outdir_prefix + '/plots/'))
 admin_to_country = {}
-num_colors = 32.
+num_colors = 49.
 color_idx = 0
 dpi = 250
 
