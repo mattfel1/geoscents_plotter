@@ -286,9 +286,10 @@ def writeHtml(continent):
 
 
 def nextColor(color_idx, num_colors):
-    g = (1 + np.cos(color_idx * 4 / num_colors * 2 * np.pi)) / 2.0
-    r = (1 + np.cos((color_idx * 4 + num_colors / 3) / num_colors * 2 * np.pi)) / 2.0
-    b = (1 + np.cos((color_idx * 4 + 2 * num_colors / 3) / num_colors * 2 * np.pi)) / 2.0
+    spread = 7
+    g = (1 + np.cos(color_idx * spread / num_colors * 2 * np.pi)) / 2.0
+    r = (1 + np.cos((color_idx * spread + num_colors / 3) / num_colors * 2 * np.pi)) / 2.0
+    b = (1 + np.cos((color_idx * spread + 2 * num_colors / 3) / num_colors * 2 * np.pi)) / 2.0
     return (r,g,b,0.75)
 
 
@@ -302,7 +303,7 @@ writeCss()
 
 print('Output dir = %s' % (outdir_prefix + '/plots/'))
 admin_to_country = {}
-num_colors = 31.
+num_colors = 32.
 color_idx = 0
 dpi = 250
 
