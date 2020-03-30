@@ -85,6 +85,81 @@ def initJs(continent):
     with open("/plots/" + continent + '.js', 'w+') as f:
         f.write('var dataSet = [')
 
+def writeIndex():
+    with open("/plots/index.html", 'w+') as f:
+        f.write("""
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="theme.css">
+<button class="room-btn" onclick="window.location.href = 'World.html';">World</button>
+<button class="room-btn" onclick="window.location.href = 'Trivia.html';">Trivia</button>
+<button class="room-btn" onclick="window.location.href = 'Europe.html';">Europe</button>
+<button class="room-btn" onclick="window.location.href = 'Africa.html';">Africa</button>
+<button class="room-btn" onclick="window.location.href = 'Asia.html';">Asia</button>
+<button class="room-btn" onclick="window.location.href = 'Oceania.html';">Oceania</button>
+<button class="room-btn" onclick="window.location.href = 'NAmerica.html';">N. America</button>
+<button class="room-btn" onclick="window.location.href = 'SAmerica.html';">S. America</button>
+<h1>Choose a map from above to view a data table!</h1>
+
+""")
+
+def writeCss():
+    with open("/plots/theme.css", 'w+') as f:
+        f.write("""
+.room-btn {
+    cursor: pointer;
+    border: 1px solid #333;
+    width: 100px;
+    padding: 2px 2px;
+    margin: 3px 3px;
+    font-size: 16px;
+    background: #a9e7f9; /* fallback */
+    background: -moz-linear-gradient(top,  #a9e7f9 0%, #77d3ef 4%, #05abe0 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#a9e7f9), color-stop(4%,#77d3ef), color-stop(100%,#05abe0));
+    background: -webkit-linear-gradient(top,  #a9e7f9 0%,#77d3ef 4%,#05abe0 100%);
+    background: -o-linear-gradient(top,  #a9e7f9 0%,#77d3ef 4%,#05abe0 100%);
+    background: -ms-linear-gradient(top,  #a9e7f9 0%,#77d3ef 4%,#05abe0 100%);
+    background: linear-gradient(to bottom,  #a9e7f9 0%,#77d3ef 4%,#05abe0 100%);
+    border-radius: 2px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.3);
+}
+
+.special-room-btn {
+    cursor: pointer;
+    border: 1px solid #333;
+    width: 100px;
+    padding: 2px 2px;
+    margin: 3px 3px;
+    font-size: 16px;
+    background: #ffe200; /* fallback */
+    background: -moz-linear-gradient(top,  #ffe200 0%, #dbc300 4%, #bda800 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffe200), color-stop(4%,#dbc300), color-stop(100%,#bda800));
+    background: -webkit-linear-gradient(top,  #ffe200 0%,#dbc300 4%,#bda800 100%);
+    background: -o-linear-gradient(top,  #ffe200 0%,#dbc300 4%,#bda800 100%);
+    background: -ms-linear-gradient(top,  #ffe200 0%,#dbc300 4%,#bda800 100%);
+    background: linear-gradient(to bottom,  #ffe200 0%,#dbc300 4%,#bda800 100%);
+    border-radius: 2px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.3);
+}
+
+.dataTables_filter {
+   float: left !important;
+}
+
+
+.filter-btn {
+    cursor: pointer;
+    border: 1px solid #333;
+    width: 200px;
+    padding: 2px 2px;
+    margin: 3px 3px;
+    font-size: 16px;
+    background: #a9e7f9; /* fallback */
+    border-radius: 2px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.3);
+}
+""")
 def addJs(entry):
     with open("/plots/" + continent + '.js', 'a') as f:
         f.write('[%s],\n' % entry)
@@ -95,7 +170,8 @@ def finishJs(continent):
 ];
 
 $(document).ready(function() {
-    $('#%s').DataTable( {
+    $("#all").css("background","yellow");
+    const table = $('#%s').DataTable( {
         data: dataSet,
         "lengthChange": false,
         "pageLength": 9999,
@@ -106,16 +182,15 @@ $(document).ready(function() {
         deferRender:    true,
         "order": [[5, 'asc']],
         columns: [
-            { title: "Type", "width": "5%"},
-            { title: "Country", "width": "5%" },
-            { title: "Admin", "width": "5%"},
-            { title: "City", "width": "5%" },
-            { title: "In-game Name", "width": "20%"},
-            { title: "Avg Dist (km)", "width": "5%" },
-            { title: "Std Dist (km)", "width": "5%" },
-            { title: "# Clicks", "width": "5%" },
-            { title: "Standard plot", "width": "5%"},
-            { title: "On-map plot", "width": "5%"}
+            { title: "Type", "width": "5%%"},
+            { title: "Country", "width": "5%%" },
+            { title: "Admin", "width": "5%%"},
+            { title: "City", "width": "5%%" },
+            { title: "Avg Dist (km)", "width": "5%%" },
+            { title: "Std Dist (km)", "width": "5%%" },
+            { title: "# Clicks", "width": "5%%" },
+            { title: "Histogram", "width": "5%%"},
+            { title: "Game Replay", "width": "5%%"}
         ],
         columnDefs: [
             {
@@ -124,25 +199,67 @@ $(document).ready(function() {
                 },
                 targets: [2,3,4]
             }
-        ]
+        ],
     } );
+    $('#aggregates').on('click', function () {
+        $("#aggregates").css("background","yellow");
+        $("#entry").css("background","#a9e7f9");
+        $("#all").css("background","#a9e7f9");
+        table.columns(0).search("Aggregate").draw();
+    });
+    $('#all').on('click', function () {
+        $("#aggregates").css("background","#a9e7f9");
+        $("#entry").css("background","#a9e7f9");
+        $("#all").css("background","yellow");
+        table.columns(0).search("").draw();
+    });
+    $('#entry').on('click', function () {
+        $("#aggregates").css("background","#a9e7f9");
+        $("#entry").css("background","yellow");
+        $("#all").css("background","#a9e7f9");
+        table.columns(0).search("Entry").draw();
+    });
 } );
 """ % continent)
     
+def trackAdmin(country):
+    return country == 'United States' or country == 'Canada' or country == 'China' or country == 'India' or country == 'Brazil' or country == 'Russia' or country == 'Australia' or country == 'Indonesia'
 
 def stripSpecial(x):
     return re.sub(r'[^\x00-\x7F]','x', x)
 
 def writeHtml(continent):
     with open("/plots/" + continent + '.html', 'w+') as f:
+        specialworld = 'special-' if continent == "World" else ""
+        specialtrivia = 'special-' if continent == "Trivia" else ""
+        specialeurope = 'special-' if continent == "Europe" else ""
+        specialafrica = 'special-' if continent == "Africa" else ""
+        specialasia = 'special-' if continent == "Asia" else ""
+        specialoceania = 'special-' if continent == "Oceania" else ""
+        specialnamerica = 'special-' if continent == "NAmerica" else ""
+        specialsamerica = 'special-' if continent == "SAmerica" else ""
         f.write("""
+
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
-<h1>Data for %s</h1>
+<link rel="stylesheet" href="theme.css">
+<button class="%sroom-btn" onclick="window.location.href = 'World.html';">World</button>
+<button class="%sroom-btn" onclick="window.location.href = 'Trivia.html';">Trivia</button>
+<button class="%sroom-btn" onclick="window.location.href = 'Europe.html';">Europe</button>
+<button class="%sroom-btn" onclick="window.location.href = 'Africa.html';">Africa</button>
+<button class="%sroom-btn" onclick="window.location.href = 'Asia.html';">Asia</button>
+<button class="%sroom-btn" onclick="window.location.href = 'Oceania';">Oceania</button>
+<button class="%sroom-btn" onclick="window.location.href = 'NAmerica';">N. America</button>
+<button class="%sroom-btn" onclick="window.location.href = 'SAmerica';">S. America</button>
+<h1>Data Table for %s Map</h1>
+<button id="all" class="filter-btn">Show All</button>
+<button id="aggregates" class="filter-btn">Show Aggregates Only</button>
+<button id="entry" class="filter-btn">Show Entries Only</button>
 <table id="%s" class="display" width="100%%"></table>
 <script  type="text/javascript" src="%s.js"></script>
-""" % (continent, continent, continent))
+
+""" % (specialworld,specialtrivia,specialeurope,specialafrica,specialasia,specialoceania,specialnamerica,specialsamerica,continent, continent, continent))
 
 
 def nextColor(color_idx, num_colors):
@@ -157,9 +274,15 @@ def nextColor(color_idx, num_colors):
 ########
 pathlist = Path('.').glob('**/*.json')
 
+writeIndex()
+writeCss()
+
 player_country_colors = {}
+admin_to_country = {}
 num_colors = 30.
 color_idx = 0
+dpi = 200
+
 
 for path in pathlist:
     # because path is object not string
@@ -172,23 +295,32 @@ for path in pathlist:
    
 
     with open(file) as json_file:
-        countries = {} 
+        aggregate_dists = {} 
+        aggregate_lats = {} 
+        aggregate_lons = {} 
+        aggregate_times = {} 
+        aggregate_player_countries = {} 
         entriesSummary = []
         continentSummary = []
         data = json.load(json_file)
         entry_id = 0
         for entry in data:
-            if (entry_id == 5): break
+            # if (entry_id == 5): break # early quit
             print('(%d / %d): %s' % (entry_id, len(data), entry))
             entry_id = entry_id + 1
             # Create entry for this city
             try:
                 dist_data = data[entry]['dists']
-                country = data[entry]['country']
-                if (country in countries): 
-                    countries[country] = countries[country] + dist_data
+                country = '-' if 'country' not in data[entry] else data[entry]['country']
+                if trackAdmin(country):
+                    aggregate_name = data[entry]['admin']
+                    admin_to_country[aggregate_name] = country
                 else:
-                    countries[country] = dist_data
+                    aggregate_name = country
+                if (aggregate_name in aggregate_dists): 
+                    aggregate_dists[aggregate_name] = aggregate_dists[aggregate_name] + dist_data
+                else:
+                    aggregate_dists[aggregate_name] = dist_data
                 mean_dist = data[entry]['mean_dist']
                 std_dist = data[entry]['std_dist']
                 x = np.linspace(0,max(dist_data),100)
@@ -209,13 +341,13 @@ for path in pathlist:
 
 
                 # Save entry in table
-                anim_name = 'animation_' + continent + '_' + data[entry]['country'] + '_' + entry
+                anim_name = 'animation_' + continent + '_' + country + '_' + stripSpecial(entry.replace(' ','-').replace('/','-'))
                 admin = "N/A" if 'admin' not in data[entry] else data[entry]['admin']
                 reghist = '<a href=\\"%s\\"><img src=\\"%s\\" height=60px></a>' % (fname, fname)
                 anim = '<a href=\\"%s\\"><img src=\\"%s\\" height = 60px></a>' % (anim_name + '.gif', anim_name + '.gif')
                 link = "https://en.wikipedia.org/wiki/Special:Search?search=" + stripSpecial(entry) + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
-                linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, stripSpecial(entry)) 
-                addJs('"Entry","' + country + '","' + admin + '","' + stripSpecial(data[entry]['city']) + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
+                linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, stripSpecial(data[entry]['city'])) 
+                addJs('"Entry","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
 
                 # Generate animation
                 fileList = glob.glob('/plots/raw_animation*')
@@ -229,9 +361,19 @@ for path in pathlist:
                 times = [l for l,x in zip(times,lats) if x != "x"]
                 player_countries = [l for l,x in zip(player_countries,lats) if x != "x"]
                 lats = [x for x in lats if x != "x"]
+                if (aggregate_name in aggregate_lats): 
+                    aggregate_lats[aggregate_name] = aggregate_lats[aggregate_name] + lats
+                    aggregate_lons[aggregate_name] = aggregate_lons[aggregate_name] + lons
+                    aggregate_times[aggregate_name] = aggregate_times[aggregate_name] + times
+                    aggregate_player_countries[aggregate_name] = aggregate_player_countries[aggregate_name] + player_countries
+                else:
+                    aggregate_lats[aggregate_name] = lats
+                    aggregate_lons[aggregate_name] = lons
+                    aggregate_lats[aggregate_name] = lats
+                    aggregate_times[aggregate_name] = times
+                    aggregate_player_countries[aggregate_name] = player_countries
                 timestep = 0.25
                 final_frames = 30
-                dpi = 200
                 plt.figure(figsize=(MAP_WIDTH/dpi, MAP_HEIGHT/dpi), dpi=dpi)
                 plt.imshow(continent_map)
                 ax = plt.gca()
@@ -254,8 +396,6 @@ for path in pathlist:
                         patchList.append(dk)
                 # lines = [Line2D([0], [0], color=c, linewidth=3, linestyle='--') for c in colors]
                 plt.legend(handles=patchList, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=4)
-
-
                 for t in np.arange(10, 0, -timestep):
                     lowerbound = t - timestep
                     frame_lats = [x for x,stamp in zip(lats, times) if stamp > lowerbound and stamp <= t]
@@ -286,35 +426,116 @@ for path in pathlist:
                 img.save(fp=fp_out, format='GIF', append_images=imgs,
                          save_all=True, duration=250, loop=0)
                 plt.clf()
-
-
-            except: 
-                print('Failed on %s' % entry)
-                print(sys.exc_info()[0])
-                continue
+                plt.close()
+            except Exception as e: # work on python 3.x
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                print(exc_type, fname, exc_tb.tb_lineno)
 
 
         # Add aggregate for each country
         if (continent != "Trivia"): 
-            for country in countries:
-                dist_data = countries[country]
-                mean_dist = np.mean(dist_data)
-                std_dist = np.std(dist_data)
-                bins = plt.hist(dist_data, bins=20)
-                x = np.linspace(0,max(dist_data),100)
-                fit = stats.norm.pdf(x, mean_dist, std_dist)
-                plt.plot(x,(max(bins[0]) / max(fit)) * fit)
-                plt.title('Aggregate for ' + country)
-                plt.xlim([0,max(dist_data)])
-                fname = 'country_' + continent + '_' + country + '.jpg'
-                fname = stripSpecial(fname.replace(' ','-').replace('/','-'))
-                plt.savefig('/plots/' + fname, optimize=True)
-                plt.clf()
-                reghist = '<a href=\\"%s\\"><img src=\\"%s\\" height=60px></a>' % (fname, fname)
-                link = "https://en.wikipedia.org/wiki/Special:Search?search=" + country + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
-                linkedCountry = '<a href=\\"%s\\">%s</a>' % (link, country) 
-                addJs('"Aggregate","' + linkedCountry + '","","","","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + '-' + '"')
-    
+            for aggregate_name in aggregate_dists:
+                try:
+                    if (aggregate_name in admin_to_country):
+                        country = admin_to_country[aggregate_name]
+                        admin = aggregate_name
+                    else:
+                        country = aggregate_name
+                    dist_data = aggregate_dists[aggregate_name]
+                    mean_dist = np.mean(dist_data)
+                    std_dist = np.std(dist_data)
+                    bins = plt.hist(dist_data, bins=20)
+                    x = np.linspace(0,max(dist_data),100)
+                    fit = stats.norm.pdf(x, mean_dist, std_dist)
+                    plt.plot(x,(max(bins[0]) / max(fit)) * fit)
+                    plt.title('Aggregate for ' + aggregate_name)
+                    plt.xlim([0,max(dist_data)])
+                    fname = 'country_' + continent + '_' + aggregate_name + '.jpg'
+                    fname = stripSpecial(fname.replace(' ','-').replace('/','-'))
+                    plt.savefig('/plots/' + fname, optimize=True)
+                    plt.clf()
+                    reghist = '<a href=\\"%s\\"><img src=\\"%s\\" height=60px></a>' % (fname, fname)
+                    anim_name = 'animation_' + continent + '_' + aggregate_name
+                    anim = '<a href=\\"%s\\"><img src=\\"%s\\" height = 60px></a>' % (anim_name + '.gif', anim_name + '.gif')
+                    link = "https://en.wikipedia.org/wiki/Special:Search?search=" + aggregate_name + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
+                    if (aggregate_name in admin_to_country):
+                        linkedAdmin = '<a href=\\"%s\\">%s</a>' % (link, admin)  
+                        linkedCountry = country
+                    else:
+                        linkedAdmin = '-'
+                        linkedCountry = '<a href=\\"%s\\">%s</a>' % (link, country) 
+                    addJs('"Aggregate","' + linkedCountry + '","' + linkedAdmin + '","-","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
+        
+                    # Generate animation
+                    fileList = glob.glob('/plots/raw_animation*')
+                    for filePath in fileList:
+                        os.remove(filePath)
+                    lats = aggregate_lats[aggregate_name]
+                    lons = aggregate_lons[aggregate_name]
+                    times = aggregate_times[aggregate_name]
+                    player_countries = aggregate_player_countries[aggregate_name]
+                    timestep = 0.25
+                    final_frames = 30
+                    plt.figure(figsize=(MAP_WIDTH/dpi, MAP_HEIGHT/dpi), dpi=dpi)
+                    plt.imshow(continent_map)
+                    ax = plt.gca()
+                    plt.ylim([MAP_HEIGHT,0])
+                    plt.xlim([0,MAP_WIDTH])
+                    plt.title(aggregate_name)
+                    plt.axis('off')
+                    frame = 0
+                    legend_countries = []
+                    patchList = []
+                    for c in player_countries:
+                        if (c not in player_country_colors):
+                            player_country_colors[c] = nextColor(color_idx, num_colors)
+                            color_idx = (color_idx + 1) % num_colors
+                        if (c not in legend_countries):
+                            legend_countries.append(c)
+                            dk = patches.Patch(color=player_country_colors[c], label=c)
+                            patchList.append(dk)
+                    # lines = [Line2D([0], [0], color=c, linewidth=3, linestyle='--') for c in colors]
+                    plt.legend(handles=patchList, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=4)
+                    for t in np.arange(10, 0, -timestep):
+                        lowerbound = t - timestep
+                        frame_lats = [x for x,stamp in zip(lats, times) if stamp > lowerbound and stamp <= t]
+                        frame_lons = [x for x,stamp in zip(lons, times) if stamp > lowerbound and stamp <= t]
+                        frame_player_countries = [x for x,stamp in zip(player_countries, times) if stamp > lowerbound and stamp <= t]
+                        frame_ctr = int(np.ceil(t))
+                        for i in range(len(frame_lats)):
+                            x,y = geoToMerc(continent, float(frame_lats[i]), float(frame_lons[i]))
+                            color = player_country_colors[frame_player_countries[i]]
+                            plt.scatter([x],[y], color = color, s = 5)
+                        rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#17eb5e',facecolor='#17eb5e')
+                        ax.add_patch(rect)
+                        time = plt.text(0, 60,str(frame_ctr),fontsize=20)
+                        plt.savefig('/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
+                        frame = frame + 1
+                        time.set_visible(False)
+                    # make final frame
+                    rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#ffad99',facecolor='#ffad99')
+                    ax.add_patch(rect)
+                    plt.text(0, 60,0,fontsize=20)
+                    for i in range(final_frames):
+                        plt.savefig('/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
+                        frame = frame + 1
+                    # export animation
+                    fp_in = "/plots/raw_" + anim_name + "_*.png"
+                    fp_out = "/plots/" + anim_name + ".gif"
+                    img, *imgs = [Image.open(f) for f in sorted(glob.glob(fp_in))]
+                    img.save(fp=fp_out, format='GIF', append_images=imgs,
+                             save_all=True, duration=250, loop=0)
+                    plt.clf()
+                    plt.close()
+
+                except Exception as e: # work on python 3.x
+                    exc_type, exc_obj, exc_tb = sys.exc_info()
+                    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                    print(exc_type, fname, exc_tb.tb_lineno)
+
+
+
     finishJs(continent)
             
         
