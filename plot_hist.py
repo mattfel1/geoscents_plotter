@@ -309,7 +309,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
         entry_id = 0
         for entry in data:
             # if (entry_id == 5): break # early quit
-            print('(%d / %d): %s' % (entry_id, len(data), entry))
+            print('%s: (%d / %d): %s' % (continent, entry_id, len(data), entry))
             entry_id = entry_id + 1
             # Create entry for this city
             try:
