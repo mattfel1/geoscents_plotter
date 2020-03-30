@@ -409,6 +409,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 frame = 0
                 legend_countries = []
                 player_country_colors = {}
+                color_idx = 0
                 patchList = []
                 for c in player_countries:
                     if (c not in player_country_colors):
