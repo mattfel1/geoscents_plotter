@@ -2,7 +2,6 @@ import matplotlib.image as mpimg
 import scipy.stats as stats 
 import sys
 import os
-import ipinfo
 import json
 from pathlib import Path
 import urllib.request
@@ -19,6 +18,7 @@ from PIL import Image
 
 MAP_WIDTH = 1530
 MAP_HEIGHT = 900
+outdir_prefix = '/home/mattfel/'
 
 def geoToMerc(room,lat,lon):
     if (room == "World"):
@@ -82,11 +82,11 @@ def geoToMerc(room,lat,lon):
     return col, row # transposed in python coords compared to js coords
 
 def initJs(continent):
-    with open("/plots/" + continent + '.js', 'w+') as f:
+    with open(outdir_prefix + "/plots/" + continent + '.js', 'w+') as f:
         f.write('var dataSet = [')
 
 def writeIndex():
-    with open("/plots/index.html", 'w+') as f:
+    with open(outdir_prefix + "/plots/index.html", 'w+') as f:
         f.write("""
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
@@ -105,7 +105,7 @@ def writeIndex():
 """)
 
 def writeCss():
-    with open("/plots/theme.css", 'w+') as f:
+    with open(outdir_prefix + "/plots/theme.css", 'w+') as f:
         f.write("""
 .room-btn {
     cursor: pointer;
@@ -161,11 +161,11 @@ def writeCss():
 }
 """)
 def addJs(entry):
-    with open("/plots/" + continent + '.js', 'a') as f:
+    with open(outdir_prefix + "/plots/" + continent + '.js', 'a') as f:
         f.write('[%s],\n' % entry)
     
 def finishJs(continent):
-    with open("/plots/" + continent + '.js', 'a') as f:
+    with open(outdir_prefix + "/plots/" + continent + '.js', 'a') as f:
         f.write("""
 ];
 
@@ -231,7 +231,7 @@ def stripSpecial(x):
     return re.sub(r'[^A-Za-z0-9\(\),. ]+','_',x)
 
 def writeHtml(continent):
-    with open("/plots/" + continent + '.html', 'w+') as f:
+    with open(outdir_prefix + "/plots/" + continent + '.html', 'w+') as f:
         specialworld = 'special-' if continent == "World" else ""
         specialtrivia = 'special-' if continent == "Trivia" else ""
         specialeurope = 'special-' if continent == "Europe" else ""
@@ -279,8 +279,7 @@ pathlist = Path('.').glob('**/*.json')
 writeIndex()
 writeCss()
 
-outdir_prefix = '/home/mattfel/'
-print('Output dir = %s' % (outdir_prefix + '/plots/'))
+print('Output dir = %s' % (outdir_prefix + outdir_prefix + '/plots/'))
 player_country_colors = {}
 admin_to_country = {}
 num_colors = 30.
@@ -336,7 +335,7 @@ for path in [x for x in pathlist if mapFilter in x]:
                 plt.xlim([0,max(dist_data)])
                 fname = 'entry_' + continent + '_' + data[entry]['country'] + '_' + entry + '.jpg'
                 fname = stripSpecial(fname.replace(' ','-').replace('/','-'))
-                plt.savefig('/plots/' + fname, optimize=True)
+                plt.savefig(outdir_prefix + '/plots/' + fname, optimize=True)
                 plt.clf()
                 # # Interactive plot show
                 #plt.show(block=False)
@@ -354,7 +353,7 @@ for path in [x for x in pathlist if mapFilter in x]:
                 addJs('"Entry","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
 
                 # Generate animation
-                fileList = glob.glob('/plots/raw_animation*')
+                fileList = glob.glob(outdir_prefix + '/plots/raw_animation*')
                 for filePath in fileList:
                     os.remove(filePath)
                 lats = data[entry]['lats']
@@ -414,7 +413,7 @@ for path in [x for x in pathlist if mapFilter in x]:
                         plt.scatter([x],[y], color = color, s = 4)
 
                     time = plt.text(0, 60,str(frame_ctr),fontsize=16)
-                    plt.savefig('/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
+                    plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
                     frame = frame + 1
                     time.set_visible(False)
                 # make final frame
@@ -422,11 +421,11 @@ for path in [x for x in pathlist if mapFilter in x]:
                 ax.add_patch(rect)
                 plt.text(0, 60,0,fontsize=16)
                 for i in range(final_frames):
-                    plt.savefig('/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
+                    plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
                     frame = frame + 1
                 # export animation
-                fp_in = "/plots/raw_" + anim_name + "_*.png"
-                fp_out = "/plots/" + anim_name + ".gif"
+                fp_in = outdir_prefix + "/plots/raw_" + anim_name + "_*.png"
+                fp_out = outdir_prefix + "/plots/" + anim_name + ".gif"
                 img, *imgs = [Image.open(f) for f in sorted(glob.glob(fp_in))]
                 img.save(fp=fp_out, format='GIF', append_images=imgs,
                          save_all=True, duration=500, loop=1)
@@ -458,7 +457,7 @@ for path in [x for x in pathlist if mapFilter in x]:
                     plt.xlim([0,max(dist_data)])
                     fname = 'country_' + continent + '_' + aggregate_name + '.jpg'
                     fname = stripSpecial(fname.replace(' ','-').replace('/','-'))
-                    plt.savefig('/plots/' + fname, optimize=True)
+                    plt.savefig(outdir_prefix + '/plots/' + fname, optimize=True)
                     plt.clf()
                     reghist = '<a href=\\"%s\\"><img src=\\"%s\\" height=60px></a>' % (fname, fname)
                     anim_name = 'animation_' + continent + '_' + aggregate_name
@@ -473,7 +472,7 @@ for path in [x for x in pathlist if mapFilter in x]:
                     addJs('"Aggregate","' + linkedCountry + '","' + linkedAdmin + '","-","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
         
                     # Generate animation
-                    fileList = glob.glob('/plots/raw_animation*')
+                    fileList = glob.glob(outdir_prefix + '/plots/raw_animation*')
                     for filePath in fileList:
                         os.remove(filePath)
                     lats = aggregate_lats[aggregate_name]
@@ -515,7 +514,7 @@ for path in [x for x in pathlist if mapFilter in x]:
                             color = player_country_colors[frame_player_countries[i]]
                             plt.scatter([x],[y], color = color, s = 4)
                         time = plt.text(0, 60,str(frame_ctr),fontsize=20)
-                        plt.savefig('/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
+                        plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
                         frame = frame + 1
                         time.set_visible(False)
                     # make final frame
@@ -523,11 +522,11 @@ for path in [x for x in pathlist if mapFilter in x]:
                     ax.add_patch(rect)
                     plt.text(0, 60,0,fontsize=20)
                     for i in range(final_frames):
-                        plt.savefig('/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
+                        plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
                         frame = frame + 1
                     # export animation
-                    fp_in = "/plots/raw_" + anim_name + "_*.png"
-                    fp_out = "/plots/" + anim_name + ".gif"
+                    fp_in = outdir_prefix + "/plots/raw_" + anim_name + "_*.png"
+                    fp_out = outdir_prefix + "/plots/" + anim_name + ".gif"
                     img, *imgs = [Image.open(f) for f in sorted(glob.glob(fp_in))]
                     img.save(fp=fp_out, format='GIF', append_images=imgs,
                              save_all=True, duration=500, loop=1)
