@@ -375,8 +375,8 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 # Save entry in table
                 anim_name = 'animation_' + continent + '_' + country + '_' + stripSpecial(entry.replace(' ','-').replace('/','-'))
                 admin = "N/A" if 'admin' not in data[entry] else data[entry]['admin']
-                reghist = '<a href=\\"%s\\"><img src=\\"%s\\" height=40px></a>' % (fname, fname)
-                anim = '<a href=\\"%s\\"><img src=\\"%s\\" height = 40px></a>' % (anim_name + '.gif', anim_name + '.gif')
+                reghist = '<a href=\\"%s\\"><img src=\\"%s\\" alt=\\"link\\" height=40px></a>' % (fname, fname)
+                anim = '<a href=\\"%s\\"><img src=\\"%s\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.gif', anim_name + '.gif')
                 link = "https://en.wikipedia.org/wiki/Special:Search?search=" + stripSpecial(entry) + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
                 linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, stripSpecial(data[entry]['city'])) 
                 addJs('"Entry","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
@@ -497,9 +497,9 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     fname = stripSpecial(fname.replace(' ','-').replace('/','-'))
                     plt.savefig(outdir_prefix + '/plots/' + fname, optimize=True)
                     plt.clf()
-                    reghist = '<a href=\\"%s\\"><img src=\\"%s\\" height=40px></a>' % (fname, fname)
+                    reghist = '<a href=\\"%s\\"><img src=\\"%s\\" alt=\\"link\\" height=40px></a>' % (fname, fname)
                     anim_name = 'animation_' + continent + '_' + aggregate_name
-                    anim = '<a href=\\"%s\\"><img src=\\"%s\\" height = 40px></a>' % (anim_name + '.gif', anim_name + '.gif')
+                    anim = '<a href=\\"%s\\"><img src=\\"%s\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.gif', anim_name + '.gif')
                     link = "https://en.wikipedia.org/wiki/Special:Search?search=" + aggregate_name + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
                     if (aggregate_name in admin_to_country):
                         linkedAdmin = '<a href=\\"%s\\">%s</a>' % (link, admin)  
