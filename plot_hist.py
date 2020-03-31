@@ -18,7 +18,8 @@ from PIL import Image
 
 MAP_WIDTH = 1530
 MAP_HEIGHT = 900
-outdir_prefix = '/'
+outdir_prefix = '/home/mattfel/' # lagos path
+#outdir_prefix = '/' # local path
 
 def geoToMerc(room,lat,lon):
     if (room == "World"):
@@ -103,7 +104,7 @@ def writeIndex():
 <button class="room-btn" onclick="window.location.href = 'SAmerica.html';">S. America</button>
 <h1>Choose a map from above to view a data table!</h1>
 NOTE: distance data was collected for a while before lat/lon data started getting collected. This is why the histograms show more data points than the animations.
-<br>
+<br><br>
 Raw data can be found <a href="https://github.com/mattfel1/geoscents_stats">here</a>
 """)
 
@@ -406,7 +407,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 plt.title(entry)
                 plt.axis('off')
                 true_x, true_y = (0,0) if "true_lat" not in data[entry] else geoToMerc(continent, data[entry]["true_lat"], data[entry]["true_lon"]) 
-                plt.scatter([true_x], [true_y], marker='*', color='w', s = 30, edgecolors = 'black')
+                plt.scatter([true_x], [true_y], marker='*', color='w', s = 20, edgecolors = 'black')
                 frame = 0
                 legend_countries = []
                 player_country_colors = {}
@@ -421,7 +422,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                         dk = patches.Patch(color=player_country_colors[c], label=c)
                         patchList.append(dk)
                 # lines = [Line2D([0], [0], color=c, linewidth=3, linestyle='--') for c in colors]
-                plt.legend(handles=patchList, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=4)
+                plt.legend(handles=patchList, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=4, title_fontsize=4, title='Player Country')
                 rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#17eb5e',facecolor='#17eb5e')
                 ax.add_patch(rect)                
                 for t in np.arange(10, 0, -timestep):
@@ -433,7 +434,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     for i in range(len(frame_lats)):
                         x,y = geoToMerc(continent, float(frame_lats[i]), float(frame_lons[i]))
                         color = player_country_colors[frame_player_countries[i]]
-                        plt.scatter([x],[y], color = color, s = 4)
+                        plt.scatter([x],[y], color = color, s = 2)
 
                     time = plt.text(0, 60,str(frame_ctr),fontsize=12)
                     plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
@@ -526,7 +527,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                             dk = patches.Patch(color=player_country_colors[c], label=c)
                             patchList.append(dk)
                     # lines = [Line2D([0], [0], color=c, linewidth=3, linestyle='--') for c in colors]
-                    plt.legend(handles=patchList, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=4)
+                    plt.legend(handles=patchList, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=4, title_fontsize=4, title='Player Country')
                     rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#17eb5e',facecolor='#17eb5e')
                     ax.add_patch(rect)
                     for t in np.arange(10, 0, -timestep):
@@ -538,7 +539,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                         for i in range(len(frame_lats)):
                             x,y = geoToMerc(continent, float(frame_lats[i]), float(frame_lons[i]))
                             color = player_country_colors[frame_player_countries[i]]
-                            plt.scatter([x],[y], color = color, s = 4)
+                            plt.scatter([x],[y], color = color, s = 2)
                         time = plt.text(0, 60,str(frame_ctr),fontsize=20)
                         plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
                         frame = frame + 1
