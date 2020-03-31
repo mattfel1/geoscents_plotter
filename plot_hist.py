@@ -455,6 +455,10 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                          save_all=True, duration=timestep*1000, loop=1)
                 plt.clf()
                 plt.close()
+                fileList = glob.glob(outdir_prefix + '/plots/raw_animation_' + continent + '*')
+                for filePath in fileList:
+                    os.remove(filePath)
+
             except Exception as e: # work on python 3.x
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
@@ -559,7 +563,9 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                              save_all=True, duration=timestep*1000, loop=1)
                     plt.clf()
                     plt.close()
-
+                    fileList = glob.glob(outdir_prefix + '/plots/raw_animation_' + continent + '*')
+                    for filePath in fileList:
+                        os.remove(filePath)
                 except Exception as e: # work on python 3.x
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
