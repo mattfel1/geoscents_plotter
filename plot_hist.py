@@ -241,8 +241,15 @@ $(document).ready(function() {
         $("#all").css("background","#a9e7f9");
         table.columns(0).search("Entry").draw();
     });
+    $(window).keydown(function(e){
+        if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
+            e.preventDefault();
+            $('#%s_filter input').focus();
+            $('#%s_filter input').select();
+        }
+    });
 } );
-""" % continent)
+""" % (continent, continent, continent))
     
 def trackAdmin(country):
     return country == 'United States' or country == 'Canada' or country == 'China' or country == 'India' or country == 'Brazil' or country == 'Russia' or country == 'Australia' or country == 'Indonesia'
@@ -273,9 +280,9 @@ def writeHtml(continent):
 <button class="%sroom-btn" onclick="window.location.href = 'Europe.html';">Europe</button>
 <button class="%sroom-btn" onclick="window.location.href = 'Africa.html';">Africa</button>
 <button class="%sroom-btn" onclick="window.location.href = 'Asia.html';">Asia</button>
-<button class="%sroom-btn" onclick="window.location.href = 'Oceania';">Oceania</button>
-<button class="%sroom-btn" onclick="window.location.href = 'NAmerica';">N. America</button>
-<button class="%sroom-btn" onclick="window.location.href = 'SAmerica';">S. America</button>
+<button class="%sroom-btn" onclick="window.location.href = 'Oceania.html';">Oceania</button>
+<button class="%sroom-btn" onclick="window.location.href = 'NAmerica.html';">N. America</button>
+<button class="%sroom-btn" onclick="window.location.href = 'SAmerica.html';">S. America</button>
 <h1>Data Table for %s Map</h1>
 <button id="all" class="filter-btn">Show All</button>
 <button id="aggregates" class="filter-btn">Show Aggregates Only</button>
