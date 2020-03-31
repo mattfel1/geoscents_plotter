@@ -429,7 +429,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                         dk = patches.Patch(color=player_country_colors[c], label=c)
                         patchList.append(dk)
                 # lines = [Line2D([0], [0], color=c, linewidth=3, linestyle='--') for c in colors]
-                plt.legend(handles=patchList, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=4, title_fontsize=4, title='Player Country')
+                plt.legend(handles=patchList, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=3, title_fontsize=3, title='Player Country')
                 rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#17eb5e',facecolor='#17eb5e')
                 ax.add_patch(rect)                
                 for t in np.arange(10, 0, -timestep):
@@ -538,7 +538,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                             dk = patches.Patch(color=player_country_colors[c], label=c)
                             patchList.append(dk)
                     # lines = [Line2D([0], [0], color=c, linewidth=3, linestyle='--') for c in colors]
-                    plt.legend(handles=patchList, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=4, title_fontsize=4, title='Player Country')
+                    plt.legend(handles=patchList, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=3, title_fontsize=3, title='Player Country')
                     rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#17eb5e',facecolor='#17eb5e')
                     ax.add_patch(rect)
                     for t in np.arange(10, 0, -timestep):
