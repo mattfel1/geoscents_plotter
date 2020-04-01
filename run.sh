@@ -5,6 +5,7 @@ cd ~/geoscents_stats
 git pull
 cd ~/geoscents_plotter
 cp ~/geoscents_stats/*.json . && rm metadata.json
+mv ~/plots/* ~/old_plots/
 python3 plot_hist.py Africa &
 python3 plot_hist.py Asia &
 python3 plot_hist.py NAmerica &
@@ -15,5 +16,5 @@ python3 plot_hist.py World &
 python3 plot_hist.py Trivia &
 
 wait
-echo "all done!"
 
+bash transfer.sh

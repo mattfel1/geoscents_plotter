@@ -19,7 +19,7 @@ from PIL import Image
 MAP_WIDTH = 1530
 MAP_HEIGHT = 900
 outdir_prefix = '/home/mattfel/'
-generate_gifs = False
+generate_gifs = True
 
 def geoToMerc(room,lat,lon):
     if (room == "World"):
@@ -84,7 +84,69 @@ def geoToMerc(room,lat,lon):
 
 def initJs(continent):
     with open(outdir_prefix + "/plots/" + continent + '.js', 'w+') as f:
-        f.write('var dataSet = [')
+        f.write("""
+$(document).ready(function() {
+    $("#all").css("background","yellow");
+    const table = $('#%s').DataTable( {
+        data: dataSet,
+        "lengthChange": true,
+        "pageLength": 50,
+        "search": {
+            "search": ".*",
+            "regex": true
+        },
+        "dom": '<"top"f>rt<"bottom"ipl><"clear">',
+        deferRender:    true,
+        "order": [[5, 'asc']],
+        columns: [
+            { title: "Type", "width": "5%%"},
+            { title: "Country", "width": "5%%" },
+            { title: "Admin", "width": "5%%"},
+            { title: "City", "width": "5%%" },
+            { title: "Avg Dist (km)", "width": "5%%" },
+            { title: "Std Dist (km)", "width": "5%%" },
+            { title: "# Clicks", "width": "5%%" },
+            { title: "Histogram", "width": "5%%"},
+            { title: "Game Replay", "width": "5%%"}
+        ],
+        columnDefs: [
+            {
+                render: function (data, type, full, meta) {
+                    return "<div class='text-wrap width-150'>" + data + "</div>";
+                },
+                targets: [2,3,4]
+            }
+        ],
+    } );
+    $('#aggregates').on('click', function () {
+        $("#aggregates").css("background","yellow");
+        $("#entry").css("background","#a9e7f9");
+        $("#all").css("background","#a9e7f9");
+        table.columns(0).search("Aggregate").draw();
+    });
+    $('#all').on('click', function () {
+        $("#aggregates").css("background","#a9e7f9");
+        $("#entry").css("background","#a9e7f9");
+        $("#all").css("background","yellow");
+        table.columns(0).search("").draw();
+    });
+    $('#entry').on('click', function () {
+        $("#aggregates").css("background","#a9e7f9");
+        $("#entry").css("background","yellow");
+        $("#all").css("background","#a9e7f9");
+        table.columns(0).search("Entry").draw();
+    });
+    $(window).keydown(function(e){
+        if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
+            e.preventDefault();
+            $('#%s_filter input').focus();
+            $('#%s_filter input').select();
+        }
+    });
+} );
+
+var dataSet = [
+""" % (continent, continent, continent))
 
 def writeIndex():
     with open(outdir_prefix + "/plots/index.html", 'w+') as f:
@@ -187,69 +249,7 @@ def addJs(entry):
     
 def finishJs(continent):
     with open(outdir_prefix + "/plots/" + continent + '.js', 'a') as f:
-        f.write("""
-];
-
-$(document).ready(function() {
-    $("#all").css("background","yellow");
-    const table = $('#%s').DataTable( {
-        data: dataSet,
-        "lengthChange": true,
-        "pageLength": 50,
-        "search": {
-            "search": ".*",
-            "regex": true
-        },
-        "dom": '<"top"f>rt<"bottom"ipl><"clear">',
-        deferRender:    true,
-        "order": [[5, 'asc']],
-        columns: [
-            { title: "Type", "width": "5%%"},
-            { title: "Country", "width": "5%%" },
-            { title: "Admin", "width": "5%%"},
-            { title: "City", "width": "5%%" },
-            { title: "Avg Dist (km)", "width": "5%%" },
-            { title: "Std Dist (km)", "width": "5%%" },
-            { title: "# Clicks", "width": "5%%" },
-            { title: "Histogram", "width": "5%%"},
-            { title: "Game Replay", "width": "5%%"}
-        ],
-        columnDefs: [
-            {
-                render: function (data, type, full, meta) {
-                    return "<div class='text-wrap width-150'>" + data + "</div>";
-                },
-                targets: [2,3,4]
-            }
-        ],
-    } );
-    $('#aggregates').on('click', function () {
-        $("#aggregates").css("background","yellow");
-        $("#entry").css("background","#a9e7f9");
-        $("#all").css("background","#a9e7f9");
-        table.columns(0).search("Aggregate").draw();
-    });
-    $('#all').on('click', function () {
-        $("#aggregates").css("background","#a9e7f9");
-        $("#entry").css("background","#a9e7f9");
-        $("#all").css("background","yellow");
-        table.columns(0).search("").draw();
-    });
-    $('#entry').on('click', function () {
-        $("#aggregates").css("background","#a9e7f9");
-        $("#entry").css("background","yellow");
-        $("#all").css("background","#a9e7f9");
-        table.columns(0).search("Entry").draw();
-    });
-    $(window).keydown(function(e){
-        if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
-            e.preventDefault();
-            $('#%s_filter input').focus();
-            $('#%s_filter input').select();
-        }
-    });
-} );
-""" % (continent, continent, continent))
+        f.write("""];""")
     
 def trackAdmin(country):
     return country == 'United States' or country == 'Canada' or country == 'China' or country == 'India' or country == 'Brazil' or country == 'Russia' or country == 'Australia' or country == 'Indonesia'
@@ -499,7 +499,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     plt.savefig(outdir_prefix + '/plots/' + fname, optimize=True)
                     plt.clf()
                     reghist = '<a href=\\"%s\\"><img src=\\"%s\\" alt=\\"link\\" height=40px></a>' % (fname, fname)
-                    anim_name = 'animation_' + continent + '_' + aggregate_name
+                    anim_name = 'animation_' + continent + '_' + aggregate_name.replace(' ','-').replace('/','-')
                     anim = '<a href=\\"%s\\"><img src=\\"%s\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.gif', anim_name + '.gif')
                     link = "https://en.wikipedia.org/wiki/Special:Search?search=" + aggregate_name + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
                     if (aggregate_name in admin_to_country):
