@@ -151,6 +151,19 @@ var dataSet = [
 def writeIndex():
     with open(outdir_prefix + "/plots/index.html", 'w+') as f:
         f.write("""
+<!DOCTYPE html>
+<head prefix="og: http://ogp.me/ns#">
+    <meta name="description" content="Plots for Geoscents. An online multiplayer world geography game!  Test your knowledge of city locations." />
+    <title>GeoScents Plots</title>
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <link rel="icon" type="image/png" href="http://geoscents.net/resources/favicon.png" sizes="48x48">
+    <meta name="GeoScents Plots" content="Plots for Geoscents.  An online multiplayer world geography game!  Test your knowledge of city locations. This is a recreation of the game Geosense from geosense.net.">
+    <meta property="og:image" content="http://geoscents.net/resources/ogimage.png" />
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+</head>
+<body>
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
@@ -168,6 +181,8 @@ def writeIndex():
 NOTE: distance data was collected for a while before lat/lon data started getting collected. This is why the histograms show more data points than the animations.
 <br><br>
 Raw data can be found <a href="https://github.com/mattfel1/geoscents_stats">here</a>
+</body>
+</html>
 """)
 
 def writeCss():
@@ -269,6 +284,19 @@ def writeHtml(continent):
         specialnamerica = 'special-' if continent == "NAmerica" else ""
         specialsamerica = 'special-' if continent == "SAmerica" else ""
         f.write("""
+<!DOCTYPE html>
+<head prefix="og: http://ogp.me/ns#">
+    <meta name="description" content="Plots for Geoscents. An online multiplayer world geography game!  Test your knowledge of city locations." />
+    <title>(%s) GeoScents Plots</title>
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <link rel="icon" type="image/png" href="http://geoscents.net/resources/favicon.png" sizes="48x48">
+    <meta name="(%s) GeoScents Plots" content="Plots for Geoscents.  An online multiplayer world geography game!  Test your knowledge of city locations. This is a recreation of the game Geosense from geosense.net.">
+    <meta property="og:image" content="http://geoscents.net/resources/ogimage.png" />
+<script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+
+</head>
+<body>
 
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
@@ -289,8 +317,10 @@ def writeHtml(continent):
 <button id="entry" class="filter-btn">Show Entries Only</button>
 <table id="%s" class="display" width="100%%"></table>
 <script  type="text/javascript" src="%s.js"></script>
+</body>
+</html>
 
-""" % (specialworld,specialtrivia,specialeurope,specialafrica,specialasia,specialoceania,specialnamerica,specialsamerica,continent, continent, continent))
+""" % (continent, continent, specialworld,specialtrivia,specialeurope,specialafrica,specialasia,specialoceania,specialnamerica,specialsamerica,continent, continent, continent))
 
 
 def nextColor(color_idx, num_colors):
