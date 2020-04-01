@@ -385,13 +385,16 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     aggregate_dists[aggregate_name] = dist_data
                 mean_dist = data[entry]['mean_dist']
                 std_dist = data[entry]['std_dist']
-                x = np.linspace(0,max(dist_data),100)
-                bins = plt.hist(dist_data, bins=20)
+                outliers = [x for x in dist_data if x - mean_dist > 6 * std_dist]
+                inliers = [x for x in dist_data if x - mean_dist <= 6 * std_dist]
+                x = np.linspace(0,max(inliers),100)
+                bins = plt.hist(inliers, bins=20)
                 fit = stats.norm.pdf(x, mean_dist, std_dist)
                 # Generate hist
                 plt.plot(x,(max(bins[0]) / max(fit)) * fit)
                 plt.title(entry)
-                plt.xlim([0,max(dist_data)])
+                plt.xlabel('%d outliers omitted' % len(outliers))
+                plt.xlim([0,max(inliers)])
                 fname = 'entry_' + continent + '_' + data[entry]['country'] + '_' + entry + '.jpg'
                 fname = stripSpecial(fname.replace(' ','-').replace('/','-'))
                 plt.savefig(outdir_prefix + '/plots/' + fname, optimize=True)
@@ -518,12 +521,15 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     dist_data = aggregate_dists[aggregate_name]
                     mean_dist = np.mean(dist_data)
                     std_dist = np.std(dist_data)
-                    bins = plt.hist(dist_data, bins=20)
-                    x = np.linspace(0,max(dist_data),100)
+                    outliers = [x for x in dist_data if x - mean_dist > 6 * std_dist]
+                    inliers = [x for x in dist_data if x - mean_dist <= 6 * std_dist]
+                    bins = plt.hist(inliers, bins=20)
+                    x = np.linspace(0,max(inliers),100)
                     fit = stats.norm.pdf(x, mean_dist, std_dist)
                     plt.plot(x,(max(bins[0]) / max(fit)) * fit)
                     plt.title('Aggregate for ' + aggregate_name)
-                    plt.xlim([0,max(dist_data)])
+                    plt.xlim([0,max(inliers)])
+                    plt.xlabel('%d outliers omitted' % len(outliers))
                     fname = 'country_' + continent + '_' + aggregate_name + '.jpg'
                     fname = stripSpecial(fname.replace(' ','-').replace('/','-'))
                     plt.savefig(outdir_prefix + '/plots/' + fname, optimize=True)
