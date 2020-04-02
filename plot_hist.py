@@ -15,7 +15,10 @@ import pandas as pd
 import glob
 from PIL import Image
 
+from time import gmtime, strftime
+import time
 
+update_stamp = time.strftime("%a, %b %d %Y @ %I:%M %p %Z", time.gmtime())
 MAP_WIDTH = 1530
 MAP_HEIGHT = 900
 outdir_prefix = '/home/mattfel/'
@@ -177,13 +180,13 @@ def writeIndex():
 <button class="room-btn" onclick="window.location.href = 'Oceania.html';">Oceania</button>
 <button class="room-btn" onclick="window.location.href = 'NAmerica.html';">N. America</button>
 <button class="room-btn" onclick="window.location.href = 'SAmerica.html';">S. America</button>
-<h1>Choose a map from above to view a data table!</h1>
+<h1>Choose a map from above to view a data table! (Last updated %s)</h1>
 NOTE: distance data was collected for a while before lat/lon data started getting collected. This is why the histograms show more data points than the animations.
 <br><br>
 Raw data can be found <a href="https://github.com/mattfel1/geoscents_stats">here</a>
 </body>
 </html>
-""")
+""" % update_stamp)
 
 def writeCss():
     with open(outdir_prefix + "/plots/theme.css", 'w+') as f:
@@ -311,7 +314,7 @@ def writeHtml(continent):
 <button class="%sroom-btn" onclick="window.location.href = 'Oceania.html';">Oceania</button>
 <button class="%sroom-btn" onclick="window.location.href = 'NAmerica.html';">N. America</button>
 <button class="%sroom-btn" onclick="window.location.href = 'SAmerica.html';">S. America</button>
-<h1>Data Table for %s Map</h1>
+<h1>Data Table for %s Map (Last updated %s)</h1>
 <button id="all" class="filter-btn">Show All</button>
 <button id="aggregates" class="filter-btn">Show Aggregates Only</button>
 <button id="entry" class="filter-btn">Show Entries Only</button>
@@ -320,7 +323,7 @@ def writeHtml(continent):
 </body>
 </html>
 
-""" % (continent, continent, specialworld,specialtrivia,specialeurope,specialafrica,specialasia,specialoceania,specialnamerica,specialsamerica,continent, continent, continent))
+""" % (continent, continent, specialworld,specialtrivia,specialeurope,specialafrica,specialasia,specialoceania,specialnamerica,specialsamerica,continent, update_stamp, continent, continent))
 
 
 def nextColor(color_idx, num_colors):
