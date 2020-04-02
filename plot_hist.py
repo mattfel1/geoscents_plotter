@@ -385,8 +385,8 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     aggregate_dists[aggregate_name] = dist_data
                 mean_dist = data[entry]['mean_dist']
                 std_dist = data[entry]['std_dist']
-                outliers = [x for x in dist_data if x - mean_dist > 6 * std_dist]
-                inliers = [x for x in dist_data if x - mean_dist <= 6 * std_dist]
+                outliers = [x for x in dist_data if x - mean_dist > 3 * std_dist]
+                inliers = [x for x in dist_data if x - mean_dist <= 3 * std_dist]
                 x = np.linspace(0,max(inliers),100)
                 bins = plt.hist(inliers, bins=20)
                 fit = stats.norm.pdf(x, mean_dist, std_dist)
@@ -406,15 +406,23 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
 
 
                 # Save entry in table
-                if (generate_gifs):
-                    anim_name = 'animation_' + continent + '_' + country + '_' + stripSpecial(entry.replace(' ','-').replace('/','-'))
-                    admin = "N/A" if 'admin' not in data[entry] else data[entry]['admin']
-                    reghist = '<a href=\\"%s\\"><img src=\\"%s\\" alt=\\"link\\" height=40px></a>' % (fname, fname)
-                    anim = '<a href=\\"%s\\"><img src=\\"%s\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.gif', anim_name + '.gif')
-                    link = "https://en.wikipedia.org/wiki/Special:Search?search=" + stripSpecial(entry) + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
-                    linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, stripSpecial(data[entry]['city'])) 
-                    addJs('"Entry","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
+                anim_name = 'animation_' + continent + '_' + country + '_' + stripSpecial(entry.replace(' ','-').replace('/','-'))
+                admin = "N/A" if 'admin' not in data[entry] else data[entry]['admin']
+                reghist = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (fname, fname)
+                anim = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.gif', continent + '.jpg')
+                link = "https://en.wikipedia.org/wiki/Special:Search?search=" + stripSpecial(entry) + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
+                linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, stripSpecial(data[entry]['city'])) 
+                addJs('"Entry","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
 
+                if (entry_id == 0):
+                    plt.figure(figsize=(MAP_WIDTH/dpi, MAP_HEIGHT/dpi), dpi=dpi)
+                    plt.imshow(continent_map)
+                    plt.axis('off')
+                    plt.savefig(outdir_prefix + '/plots/' + continent + '.jpg')
+                    plt.clf()
+                    plt.close()
+
+                if (generate_gifs):
                     # Generate animation
                     fileList = glob.glob(outdir_prefix + '/plots/raw_animation_' + continent + '*')
                     for filePath in fileList:
@@ -448,7 +456,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     plt.title(entry)
                     plt.axis('off')
                     true_x, true_y = (0,0) if "true_lat" not in data[entry] else geoToMerc(continent, data[entry]["true_lat"], data[entry]["true_lon"]) 
-                    plt.scatter([true_x], [true_y], marker='*', color='w', s = 20, edgecolors = 'black')
+                    plt.scatter([true_x], [true_y], marker='*', color='w', s = 10, edgecolors = 'black')
                     frame = 0
                     legend_countries = []
                     player_country_colors = {}
@@ -475,7 +483,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                         for i in range(len(frame_lats)):
                             x,y = geoToMerc(continent, float(frame_lats[i]), float(frame_lons[i]))
                             color = player_country_colors[frame_player_countries[i]]
-                            plt.scatter([x],[y], color = color, s = 2)
+                            plt.scatter([x],[y], color = color, s = 1)
 
                         time = plt.text(0, 60,str(frame_ctr),fontsize=12)
                         plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
@@ -521,8 +529,8 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     dist_data = aggregate_dists[aggregate_name]
                     mean_dist = np.mean(dist_data)
                     std_dist = np.std(dist_data)
-                    outliers = [x for x in dist_data if x - mean_dist > 6 * std_dist]
-                    inliers = [x for x in dist_data if x - mean_dist <= 6 * std_dist]
+                    outliers = [x for x in dist_data if x - mean_dist > 3 * std_dist]
+                    inliers = [x for x in dist_data if x - mean_dist <= 3 * std_dist]
                     bins = plt.hist(inliers, bins=20)
                     x = np.linspace(0,max(inliers),100)
                     fit = stats.norm.pdf(x, mean_dist, std_dist)
@@ -534,9 +542,9 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     fname = stripSpecial(fname.replace(' ','-').replace('/','-'))
                     plt.savefig(outdir_prefix + '/plots/' + fname, optimize=True)
                     plt.clf()
-                    reghist = '<a href=\\"%s\\"><img src=\\"%s\\" alt=\\"link\\" height=40px></a>' % (fname, fname)
+                    reghist = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (fname, fname)
                     anim_name = 'animation_' + continent + '_' + aggregate_name.replace(' ','-').replace('/','-')
-                    anim = '<a href=\\"%s\\"><img src=\\"%s\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.gif', anim_name + '.gif')
+                    anim = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.gif', continent + '.jpg')
                     link = "https://en.wikipedia.org/wiki/Special:Search?search=" + aggregate_name + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
                     if (aggregate_name in admin_to_country):
                         linkedAdmin = '<a href=\\"%s\\">%s</a>' % (link, admin)  
@@ -588,7 +596,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                             for i in range(len(frame_lats)):
                                 x,y = geoToMerc(continent, float(frame_lats[i]), float(frame_lons[i]))
                                 color = player_country_colors[frame_player_countries[i]]
-                                plt.scatter([x],[y], color = color, s = 2)
+                                plt.scatter([x],[y], color = color, s = 1)
                             time = plt.text(0, 60,str(frame_ctr),fontsize=20)
                             plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
                             frame = frame + 1
