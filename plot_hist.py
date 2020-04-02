@@ -417,7 +417,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, stripSpecial(data[entry]['city'])) 
                 addJs('"Entry","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
 
-                if (entry_id == 0):
+                if (entry_id == 1):
                     plt.figure(figsize=(MAP_WIDTH/dpi, MAP_HEIGHT/dpi), dpi=dpi)
                     plt.imshow(continent_map)
                     plt.axis('off')
