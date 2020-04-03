@@ -181,10 +181,10 @@ def writeIndex():
 <button class="room-btn" onclick="window.location.href = 'NAmerica.html';">N. America</button>
 <button class="room-btn" onclick="window.location.href = 'SAmerica.html';">S. America</button>
 <h1>Choose a map from above to view a data table!</h1>
-<small>(Last updated %s)</small><br>
+<small>(Last updated %s)</small><br><br>
 NOTE: distance data was collected for a while before lat/lon data started getting collected. This is why the histograms show more data points than the animations.
 <br><br>
-Raw data can be found <a href="https://github.com/mattfel1/geoscents_stats">here</a>
+This page is updated approximately every 24 hours.  Raw data can be found <a href="https://github.com/mattfel1/geoscents_stats">here</a> and is updated approximately every 8 hours.  
 </body>
 </html>
 """ % update_stamp)
@@ -461,7 +461,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     plt.title(entry)
                     plt.axis('off')
                     true_x, true_y = (0,0) if "true_lat" not in data[entry] else geoToMerc(continent, data[entry]["true_lat"], data[entry]["true_lon"]) 
-                    plt.scatter([true_x], [true_y], marker='*', color='w', s = 10, edgecolors = 'black')
+                    plt.scatter([true_x], [true_y], marker='*', color='w', s = 20, edgecolors = 'black')
                     frame = 0
                     legend_countries = []
                     player_country_colors = {}
