@@ -98,6 +98,8 @@ $(document).ready(function() {
             "search": ".*",
             "regex": true
         },
+        stateSave: true,
+        "stateDuration": 60 * 5,
         "dom": '<"top"f>rt<"bottom"ipl><"clear">',
         deferRender:    true,
         "order": [[5, 'asc']],
@@ -172,22 +174,27 @@ def writeIndex():
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="theme.css">
 <button class="lobby-btn" onclick="window.location.href = 'http://geoscents.net';">Back to Game</button>
-<button class="room-btn" onclick="window.location.href = 'World.html';">World</button>
-<button class="room-btn" onclick="window.location.href = 'Trivia.html';">Trivia</button>
-<button class="room-btn" onclick="window.location.href = 'Europe.html';">Europe</button>
-<button class="room-btn" onclick="window.location.href = 'Africa.html';">Africa</button>
-<button class="room-btn" onclick="window.location.href = 'Asia.html';">Asia</button>
-<button class="room-btn" onclick="window.location.href = 'Oceania.html';">Oceania</button>
-<button class="room-btn" onclick="window.location.href = 'NAmerica.html';">N. America</button>
-<button class="room-btn" onclick="window.location.href = 'SAmerica.html';">S. America</button>
+<button class="room-btn" onclick="window.location.href = 'World.html';">World<br><small><div id="World_count"></div></small></button>
+<button class="room-btn" onclick="window.location.href = 'Trivia.html';">Trivia<br><small><div id="Trivia_count"></div></small></button>
+<button class="room-btn" onclick="window.location.href = 'Europe.html';">Europe<br><small><div id="Europe_count"></div></small></button>
+<button class="room-btn" onclick="window.location.href = 'Africa.html';">Africa<br><small><div id="Africa_count"></div></small></button>
+<button class="room-btn" onclick="window.location.href = 'Asia.html';">Asia<br><small><div id="Asia_count"></div></small></button>
+<button class="room-btn" onclick="window.location.href = 'Oceania.html';">Oceania<br><small><div id="Oceania_count"></div></small></button>
+<button class="room-btn" onclick="window.location.href = 'NAmerica.html';">N. America<br><small><div id="NAmerica_count"></div></small></button>
+<button class="room-btn" onclick="window.location.href = 'SAmerica.html';">S. America<br><small><div id="SAmerica_count"></div></small></button>
 <h1>Choose a map from above to view a data table!</h1>
 <small>(Last updated %s)</small><br><br>
 NOTE: distance data was collected for a while before lat/lon data started getting collected. This is why the histograms show more data points than the animations.
 <br><br>
 This page is updated approximately every 24 hours.  Raw data can be found <a href="https://github.com/mattfel1/geoscents_stats">here</a> and is updated approximately every 8 hours.  
+<script src="counts.js"></script>
 </body>
 </html>
 """ % update_stamp)
+
+def writeCount(count):
+    with open(outdir_prefix + "/plots/counts.js", 'a') as f:
+        f.write("document.getElementById(\"" + continent + "_count\").innerHTML = \"(" + str(count) + " clicks)\";")
 
 def writeCss():
     with open(outdir_prefix + "/plots/theme.css", 'w+') as f:
@@ -195,7 +202,7 @@ def writeCss():
 .room-btn {
     cursor: pointer;
     border: 1px solid #333;
-    width: 100px;
+    width: 120px;
     padding: 2px 2px;
     margin: 3px 3px;
     font-size: 16px;
@@ -230,7 +237,7 @@ def writeCss():
 .special-room-btn {
     cursor: pointer;
     border: 1px solid #333;
-    width: 100px;
+    width: 120px;
     padding: 2px 2px;
     margin: 3px 3px;
     font-size: 16px;
@@ -307,14 +314,14 @@ def writeHtml(continent):
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="theme.css">
 <button class="lobby-btn" onclick="window.location.href = 'http://geoscents.net';">Back to Game</button>
-<button class="%sroom-btn" onclick="window.location.href = 'World.html';">World</button>
-<button class="%sroom-btn" onclick="window.location.href = 'Trivia.html';">Trivia</button>
-<button class="%sroom-btn" onclick="window.location.href = 'Europe.html';">Europe</button>
-<button class="%sroom-btn" onclick="window.location.href = 'Africa.html';">Africa</button>
-<button class="%sroom-btn" onclick="window.location.href = 'Asia.html';">Asia</button>
-<button class="%sroom-btn" onclick="window.location.href = 'Oceania.html';">Oceania</button>
-<button class="%sroom-btn" onclick="window.location.href = 'NAmerica.html';">N. America</button>
-<button class="%sroom-btn" onclick="window.location.href = 'SAmerica.html';">S. America</button>
+<button class="%sroom-btn" onclick="window.location.href = 'World.html';">World<br><small><div id="World_count"></div></small></button>
+<button class="%sroom-btn" onclick="window.location.href = 'Trivia.html';">Trivia<br><small><div id="Trivia_count"></div></small></button>
+<button class="%sroom-btn" onclick="window.location.href = 'Europe.html';">Europe<br><small><div id="Europe_count"></div></small></button>
+<button class="%sroom-btn" onclick="window.location.href = 'Africa.html';">Africa<br><small><div id="Africa_count"></div></small></button>
+<button class="%sroom-btn" onclick="window.location.href = 'Asia.html';">Asia<br><small><div id="Asia_count"></div></small></button>
+<button class="%sroom-btn" onclick="window.location.href = 'Oceania.html';">Oceania<br><small><div id="Oceania_count"></div></small></button>
+<button class="%sroom-btn" onclick="window.location.href = 'NAmerica.html';">N. America<br><small><div id="NAmerica_count"></div></small></button>
+<button class="%sroom-btn" onclick="window.location.href = 'SAmerica.html';">S. America<br><small><div id="SAmerica_count"></div></small></button>
 <h1>Data Table for %s Map</h1>
 <small>(Last updated %s)</small><br>
 <button id="all" class="filter-btn">Show All</button>
@@ -322,6 +329,7 @@ def writeHtml(continent):
 <button id="entry" class="filter-btn">Show Entries Only</button>
 <table id="%s" class="display" width="100%%"></table>
 <script  type="text/javascript" src="%s.js"></script>
+<script src="counts.js"></script>
 </body>
 </html>
 
@@ -355,6 +363,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
     # because path is object not string
     file = str(path)
     continent = file.replace('.json','')
+    continent_count = 0
     print(file)
     continent_map = mpimg.imread('./' + continent + '.png')
     writeHtml(continent)
@@ -378,6 +387,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
             # Create entry for this city
             try:
                 dist_data = data[entry]['dists']
+                continent_count = continent_count + len(dist_data)
                 country = '-' if 'country' not in data[entry] else data[entry]['country']
                 if trackAdmin(country):
                     aggregate_name = data[entry]['admin']
@@ -518,6 +528,9 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 print(exc_type, fname, exc_tb.tb_lineno)
 
+
+        # Report total count for continent
+        writeCount(continent_count)
 
         # Add aggregate for each country
         if (continent != "Trivia"): 
