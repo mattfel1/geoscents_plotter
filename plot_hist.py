@@ -180,7 +180,8 @@ def writeIndex():
 <button class="room-btn" onclick="window.location.href = 'Oceania.html';">Oceania</button>
 <button class="room-btn" onclick="window.location.href = 'NAmerica.html';">N. America</button>
 <button class="room-btn" onclick="window.location.href = 'SAmerica.html';">S. America</button>
-<h1>Choose a map from above to view a data table! (Last updated %s)</h1>
+<h1>Choose a map from above to view a data table!</h1>
+<small>(Last updated %s)</small><br>
 NOTE: distance data was collected for a while before lat/lon data started getting collected. This is why the histograms show more data points than the animations.
 <br><br>
 Raw data can be found <a href="https://github.com/mattfel1/geoscents_stats">here</a>
@@ -314,7 +315,8 @@ def writeHtml(continent):
 <button class="%sroom-btn" onclick="window.location.href = 'Oceania.html';">Oceania</button>
 <button class="%sroom-btn" onclick="window.location.href = 'NAmerica.html';">N. America</button>
 <button class="%sroom-btn" onclick="window.location.href = 'SAmerica.html';">S. America</button>
-<h1>Data Table for %s Map (Last updated %s)</h1>
+<h1>Data Table for %s Map</h1>
+<small>(Last updated %s)</small><br>
 <button id="all" class="filter-btn">Show All</button>
 <button id="aggregates" class="filter-btn">Show Aggregates Only</button>
 <button id="entry" class="filter-btn">Show Entries Only</button>
@@ -600,14 +602,14 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                                 x,y = geoToMerc(continent, float(frame_lats[i]), float(frame_lons[i]))
                                 color = player_country_colors[frame_player_countries[i]]
                                 plt.scatter([x],[y], color = color, s = 1)
-                            time = plt.text(0, 60,str(frame_ctr),fontsize=20)
+                            time = plt.text(0, 60,str(frame_ctr),fontsize=12)
                             plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
                             frame = frame + 1
                             time.set_visible(False)
                         # make final frame
                         rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#ffad99',facecolor='#ffad99')
                         ax.add_patch(rect)
-                        plt.text(0, 60,0,fontsize=20)
+                        plt.text(0, 60,0,fontsize=12)
                         for i in range(final_frames):
                             plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
                             frame = frame + 1
