@@ -63,7 +63,7 @@ def geoToMerc(room,lat,lon):
         lat_ts = 0.
     elif (room == "Oceania"):
         zero_lat = 28
-        max_lat = -51.2.
+        max_lat = -51.2
         min_lon = 69.
         max_lon = 220.
         lat_ts = 0.
