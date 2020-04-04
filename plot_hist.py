@@ -62,10 +62,10 @@ def geoToMerc(room,lat,lon):
         max_lon = 158.
         lat_ts = 0.
     elif (room == "Oceania"):
-        zero_lat = 10.5
-        max_lat = -48.
+        zero_lat = 28
+        max_lat = -51.2.
         min_lon = 69.
-        max_lon = 180.
+        max_lon = 220.
         lat_ts = 0.
     elif (room == "SAmerica"):
         zero_lat = 24.
@@ -74,7 +74,11 @@ def geoToMerc(room,lat,lon):
         max_lon = 17.
         lat_ts = 0.
     # get col value
-    col = (lon - min_lon) * (MAP_WIDTH / (max_lon - min_lon));
+
+    if (lon < min_lon):
+        col = (lon + 360 - min_lon) * (MAP_WIDTH / (max_lon - min_lon));
+    else: 
+        col = (lon - min_lon) * (MAP_WIDTH / (max_lon - min_lon));
     # convert from degrees to radians
     latRad = lat * np.pi / 180;
 
@@ -107,7 +111,7 @@ $(document).ready(function() {
             { title: "Type", "width": "5%%"},
             { title: "Country", "width": "5%%" },
             { title: "Admin", "width": "5%%"},
-            { title: "City", "width": "5%%" },
+            { title: "City", "width": "10%%" },
             { title: "Avg Dist (km)", "width": "5%%" },
             { title: "Std Dist (km)", "width": "5%%" },
             { title: "# Clicks", "width": "5%%" },
@@ -158,6 +162,7 @@ def writeIndex():
         f.write("""
 <!DOCTYPE html>
 <head prefix="og: http://ogp.me/ns#">
+    <meta charset="UTF-8">
     <meta name="description" content="Plots for Geoscents. An online multiplayer world geography game!  Test your knowledge of city locations." />
     <title>GeoScents Plots</title>
     <!-- Place this tag in your head or just before your close body tag. -->
@@ -192,9 +197,13 @@ This page is updated approximately every 24 hours.  Raw data can be found <a hre
 </html>
 """ % update_stamp)
 
+def initCount():
+    with open(outdir_prefix + "/plots/counts.js", 'w+') as f:
+        f.write("")
+
 def writeCount(count):
     with open(outdir_prefix + "/plots/counts.js", 'a') as f:
-        f.write("document.getElementById(\"" + continent + "_count\").innerHTML = \"(" + str(count) + " clicks)\";")
+        f.write("\ndocument.getElementById(\"" + continent + "_count\").innerHTML = \"(" + str(count) + " clicks)\";")
 
 def writeCss():
     with open(outdir_prefix + "/plots/theme.css", 'w+') as f:
@@ -322,7 +331,7 @@ def writeHtml(continent):
 <button class="%sroom-btn" onclick="window.location.href = 'Oceania.html';">Oceania<br><small><div id="Oceania_count"></div></small></button>
 <button class="%sroom-btn" onclick="window.location.href = 'NAmerica.html';">N. America<br><small><div id="NAmerica_count"></div></small></button>
 <button class="%sroom-btn" onclick="window.location.href = 'SAmerica.html';">S. America<br><small><div id="SAmerica_count"></div></small></button>
-<h1>Data Table for %s Map</h1>
+<h1>Data Table for %s Map <a href="all_%s.jpg"><img src="all_%s.jpg" class="img-thumbnail" alt="link" height=75px></a></h1>
 <small>(Last updated %s)</small><br>
 <button id="all" class="filter-btn">Show All</button>
 <button id="aggregates" class="filter-btn">Show Aggregates Only</button>
@@ -333,7 +342,7 @@ def writeHtml(continent):
 </body>
 </html>
 
-""" % (continent, continent, specialworld,specialtrivia,specialeurope,specialafrica,specialasia,specialoceania,specialnamerica,specialsamerica,continent, update_stamp, continent, continent))
+""" % (continent, continent, specialworld,specialtrivia,specialeurope,specialafrica,specialasia,specialoceania,specialnamerica,specialsamerica,continent,continent,continent, update_stamp, continent, continent))
 
 
 def nextColor(color_idx, num_colors):
@@ -359,6 +368,7 @@ color_idx = 0
 dpi = 250
 
 mapFilter = '' if (sys.argv) == 1 else sys.argv[1]
+initCount() 
 for path in [x for x in pathlist if mapFilter in str(x)]:
     # because path is object not string
     file = str(path)
@@ -378,6 +388,8 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
         aggregate_player_countries = {} 
         entriesSummary = []
         continentSummary = []
+        continentTrueXs = []
+        continentTrueYs = []
         data = json.load(json_file)
         entry_id = 0
         for entry in data:
@@ -426,7 +438,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 reghist = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (fname, fname)
                 anim = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.gif', continent + '.jpg')
                 link = "https://en.wikipedia.org/wiki/Special:Search?search=" + stripSpecial(entry) + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
-                linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, stripSpecial(data[entry]['city'])) 
+                linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, data[entry]['city']) 
                 addJs('"Entry","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
 
                 if (entry_id == 1):
@@ -437,6 +449,9 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     plt.clf()
                     plt.close()
 
+                true_x, true_y = (0,0) if "true_lat" not in data[entry] else geoToMerc(continent, data[entry]["true_lat"], data[entry]["true_lon"]) 
+                continentTrueXs.append(true_x)
+                continentTrueYs.append(true_y)
                 if (generate_gifs):
                     # Generate animation
                     fileList = glob.glob(outdir_prefix + '/plots/raw_animation_' + continent + '*')
@@ -470,7 +485,6 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     plt.xlim([0,MAP_WIDTH])
                     plt.title(entry)
                     plt.axis('off')
-                    true_x, true_y = (0,0) if "true_lat" not in data[entry] else geoToMerc(continent, data[entry]["true_lat"], data[entry]["true_lon"]) 
                     plt.scatter([true_x], [true_y], marker='*', color='w', s = 20, edgecolors = 'black')
                     frame = 0
                     legend_countries = []
@@ -529,8 +543,19 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 print(exc_type, fname, exc_tb.tb_lineno)
 
 
-        # Report total count for continent
+        # Report total count for continent and make continent aggregate map
         writeCount(continent_count)
+        plt.figure(figsize=(MAP_WIDTH/dpi, MAP_HEIGHT/dpi), dpi=dpi)
+        plt.imshow(continent_map)
+        ax = plt.gca()
+        plt.ylim([MAP_HEIGHT,0])
+        plt.xlim([0,MAP_WIDTH])
+        plt.title("All " + str(len(continentTrueXs)) + " entries for " + continent)
+        plt.axis('off')
+        for i in range(len(continentTrueXs)):
+            x,y = continentTrueXs[i], continentTrueYs[i]
+            plt.scatter([x], [y], marker='*', color='w', s = 20, edgecolors = 'black')
+        plt.savefig(outdir_prefix + '/plots/all_' + continent + ".jpg", optimize=True)
 
         # Add aggregate for each country
         if (continent != "Trivia"): 
