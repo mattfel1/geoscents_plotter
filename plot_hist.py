@@ -106,7 +106,7 @@ $(document).ready(function() {
         "stateDuration": 60 * 5,
         "dom": '<"top"f>rt<"bottom"ipl><"clear">',
         deferRender:    true,
-        "order": [[5, 'asc']],
+        "order": [[4, 'asc']],
         columns: [
             { title: "Type", "width": "5%%"},
             { title: "Country", "width": "5%%" },
@@ -338,15 +338,13 @@ def writeHtml(continent):
 <button id="entry" class="filter-btn">Show Entries Only</button>
 <table id="%s" class="display" width="100%%"></table>
 <br><br>
-<a href="all_%s.jpg"><img src="all_%s.jpg"module.exports = {
-  CITIES: [
->cheatsheet</a>
+<a href="all_%s.jpg">cheatsheet</a>
 <script  type="text/javascript" src="%s.js"></script>
 <script src="counts.js"></script>
 </body>
 </html>
 
-""" % (continent, continent, specialworld,specialtrivia,specialeurope,specialafrica,specialasia,specialoceania,specialnamerica,specialsamerica,continent,continent,continent, update_stamp, continent, continent))
+""" % (continent, continent, specialworld,specialtrivia,specialeurope,specialafrica,specialasia,specialoceania,specialnamerica,specialsamerica,continent,continent,continent, update_stamp, continent, continent, continent))
 
 
 def nextColor(color_idx, num_colors):
