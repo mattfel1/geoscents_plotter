@@ -64,8 +64,8 @@ def geoToMerc(room,lat,lon):
     elif (room == "Oceania"):
         zero_lat = 28
         max_lat = -51.2
-        min_lon = 69.
-        max_lon = 220.
+        min_lon = 92.
+        max_lon = 252.
         lat_ts = 0.
     elif (room == "SAmerica"):
         zero_lat = 24.
@@ -331,12 +331,16 @@ def writeHtml(continent):
 <button class="%sroom-btn" onclick="window.location.href = 'Oceania.html';">Oceania<br><small><div id="Oceania_count"></div></small></button>
 <button class="%sroom-btn" onclick="window.location.href = 'NAmerica.html';">N. America<br><small><div id="NAmerica_count"></div></small></button>
 <button class="%sroom-btn" onclick="window.location.href = 'SAmerica.html';">S. America<br><small><div id="SAmerica_count"></div></small></button>
-<h1>Data Table for %s Map <a href="all_%s.jpg"><img src="all_%s.jpg" class="img-thumbnail" alt="link" height=75px></a></h1>
+<h1>Data Table for %s Map <!-- <a href="all_%s.jpg"><img src="all_%s.jpg" class="img-thumbnail" alt="link" height=75px></a> --> </h1>
 <small>(Last updated %s)</small><br>
 <button id="all" class="filter-btn">Show All</button>
 <button id="aggregates" class="filter-btn">Show Aggregates Only</button>
 <button id="entry" class="filter-btn">Show Entries Only</button>
 <table id="%s" class="display" width="100%%"></table>
+<br><br>
+<a href="all_%s.jpg"><img src="all_%s.jpg"module.exports = {
+  CITIES: [
+>cheatsheet</a>
 <script  type="text/javascript" src="%s.js"></script>
 <script src="counts.js"></script>
 </body>
