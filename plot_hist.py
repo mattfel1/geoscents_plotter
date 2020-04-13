@@ -423,7 +423,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 plt.plot(x,(max(bins[0]) / max(fit)) * fit)
                 plt.title(entry)
                 plt.xlabel('Error in km (%d outliers omitted)' % len(outliers))
-                plt.ylabel('# of players' % len(outliers))
+                plt.ylabel('# of players')
                 plt.xlim([0,max(inliers)])
                 fname = 'entry_' + continent + '_' + data[entry]['country'] + '_' + entry + '.jpg'
                 fname = stripSpecial(fname.replace(' ','-').replace('/','-'))
@@ -584,7 +584,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     plt.title('Aggregate for ' + aggregate_name)
                     plt.xlim([0,max(inliers)])
                     plt.xlabel('Error in km (%d outliers omitted)' % len(outliers))
-                    plt.ylabel('# of players' % len(outliers))
+                    plt.ylabel('# of players')
                     fname = 'country_' + continent + '_' + aggregate_name + '.jpg'
                     fname = stripSpecial(fname.replace(' ','-').replace('/','-'))
                     plt.savefig(outdir_prefix + '/plots/' + fname, optimize=True)
