@@ -5,6 +5,7 @@ cd ~/geoscents_stats
 git pull
 cd ~/geoscents_plotter
 cp ~/geoscents_stats/*.json . && rm metadata.json
+cp ~/geoscents_stats/player_countries.csv .
 mv ~/plots/* ~/old_plots/
 python3 plot_hist.py Africa &
 python3 plot_hist.py Asia &
