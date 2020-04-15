@@ -389,7 +389,7 @@ def addFrame(fname, serieslabel, country, xdata, ydata, marker):
 }
 """ % (serieslabel, country, ','.join([str(int(x)) for x in xdata]), ','.join([str(int(x)) for x in ydata]), marker))
 
-def finishAnim(fname, continent, title, countries, maxframe):
+def finishAnim(fname, continent, title, countries, maxframe, stepsize):
     with open(outdir_prefix + "/plots/" + fname + '.js', 'a') as f:
         f.write("""var traces = [ truth, %s]
 var layout = {
@@ -437,7 +437,7 @@ var layout = {
           mode: 'immediate',
           fromcurrent: true,
           transition: {duration: 0},
-          frame: {duration: 500, redraw: false}
+          frame: {duration: %d, redraw: false}
         }],
         label: 'Play'
       }, {
@@ -463,7 +463,7 @@ var layout = {
       steps: sliderSteps
     }]
     };
-frames = [""" % (','.join([x.replace(' ','') + str(maxframe) for x in countries]), continent, title))
+frames = [""" % (','.join([x.replace(' ','') + str(maxframe) for x in countries]), continent, title, stepsize * 1000))
         for i in range(0,maxframe+1):
             f.write("""{data: [truth,%s], name: "frame%d"},
 """ % (','.join([x.replace(' ','') + str(i) for x in countries]), i))
@@ -630,7 +630,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                         for c in all_countries:
                             addFrame(anim_name, c.replace(' ','') + str(frame), c, x_by_country[c], y_by_country[c], 'size: 5')
                         frame = frame + 1
-                    finishAnim(anim_name, continent, entry, all_countries, frame - 1)
+                    finishAnim(anim_name, continent, entry, all_countries, frame - 1, timestep)
 
 
             except Exception as e: # work on python 3.x
@@ -684,7 +684,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     plt.clf()
                     reghist = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (fname, fname)
                     anim_name = 'animation_' + continent + '_' + aggregate_name.replace(' ','-').replace('/','-')
-                    anim = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.gif', continent + '.jpg')
+                    anim = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.html', continent + '.jpg')
                     link = "https://en.wikipedia.org/wiki/Special:Search?search=" + aggregate_name + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
                     if (aggregate_name in admin_to_country):
                         linkedAdmin = '<a href=\\"%s\\">%s</a>' % (link, admin)  
@@ -727,7 +727,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                             for c in all_countries:
                                 addFrame(anim_name, c.replace(' ','') + str(frame), c, x_by_country[c], y_by_country[c], 'size: 5')
                             frame = frame + 1
-                        finishAnim(anim_name, continent, aggregate_name, all_countries, frame - 1)
+                        finishAnim(anim_name, continent, aggregate_name, all_countries, frame - 1, timestep)
 
                             
                 except Exception as e: # work on python 3.x
