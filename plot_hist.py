@@ -409,7 +409,7 @@ var layout = {
   height: 900,
   images: [
       {
-        "source": "http://127.0.0.1:5000/resources/%s.png",
+        "source": "http://geoscents.net/resources/%s.png",
         "xref": "x",
         "yref": "y",
         "x": 0,
