@@ -384,6 +384,7 @@ def addFrame(fname, serieslabel, country, xdata, ydata, marker):
   x: [null,%s],
   y: [null,%s],
   mode: 'markers',
+  hoverinfo: 'name',
   type: 'scatter', 
   marker: {%s}
 }
@@ -421,7 +422,7 @@ var layout = {
       }
       ],
   title:'%s',
-  hovermode: false,
+  hovermode: 'closest',
     updatemenus: [{
       x: 0,
       y: 0,
