@@ -347,6 +347,130 @@ def writeHtml(continent):
 
 """ % (continent, continent, specialworld,specialtrivia,specialeurope,specialafrica,specialasia,specialoceania,specialnamerica,specialsamerica,continent,continent,continent, update_stamp, continent, continent, continent))
 
+def initAnim(fname, stepsize):
+    with open(outdir_prefix + "/plots/" + fname + '.js', 'w+') as f:
+        f.write("""
+  var sliderSteps = [];
+  for (i = 0; i < %d; i++) {
+    sliderSteps.push({
+      method: 'animate',
+      label: 10 - i * %f,
+      args: [['frame' + (i)], {
+        mode: 'immediate',
+        transition: {duration: 0},
+        frame: {duration: %d, redraw: false},
+      }]
+    });
+  }
+""" % (10 / stepsize + 1, stepsize, stepsize * 1000))
+
+    with open(outdir_prefix + "/plots/" + fname + '.html', 'w+') as f:
+        f.write("""
+<head>
+    <!-- Load plotly.js into the DOM -->
+    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+</head>
+
+<body>
+    <div id='%s'><!-- Plotly chart will be drawn inside this DIV --></div>
+    <script src='%s'></script>
+</body>
+""" % (fname, fname + '.js'))
+
+def addFrame(fname, serieslabel, country, xdata, ydata, marker):
+    with open(outdir_prefix + "/plots/" + fname + '.js', 'a') as f:
+        f.write("""var %s = {
+  name: '%s',
+  x: [null,%s],
+  y: [null,%s],
+  mode: 'markers',
+  type: 'scatter', 
+  marker: {%s}
+}
+""" % (serieslabel, country, ','.join([str(int(x)) for x in xdata]), ','.join([str(int(x)) for x in ydata]), marker))
+
+def finishAnim(fname, continent, title, countries, maxframe):
+    with open(outdir_prefix + "/plots/" + fname + '.js', 'a') as f:
+        f.write("""var traces = [ truth, %s]
+var layout = {
+  xaxis: {
+    range: [ 0, 1530 ],
+    showgrid: false,
+    zeroline: false,
+    visible: false
+  },
+  yaxis: {
+    range: [0, 900],
+    showgrid: false,
+    zeroline: false,
+    visible: false
+  },
+  width: 1530,
+  height: 900,
+  images: [
+      {
+        "source": "http://127.0.0.1:5000/resources/%s.png",
+        "xref": "x",
+        "yref": "y",
+        "x": 0,
+        "y": 900,
+        "sizex": 1530,
+        "sizey": 900,
+        "sizing": "stretch",
+        "layer": "below"
+      }
+      ],
+  title:'%s',
+  hovermode: false,
+    updatemenus: [{
+      x: 0,
+      y: 0,
+      yanchor: 'top',
+      xanchor: 'left',
+      showactive: false,
+      direction: 'left',
+      type: 'buttons',
+      pad: {t: 0, r: 0},
+      buttons: [{
+        method: 'animate',
+        args: [null, {
+          mode: 'immediate',
+          fromcurrent: true,
+          transition: {duration: 0},
+          frame: {duration: 500, redraw: false}
+        }],
+        label: 'Play'
+      }, {
+        method: 'animate',
+        args: [[null], {
+          mode: 'immediate',
+          transition: {duration: 0},
+          frame: {duration: 0, redraw: false}
+        }],
+        label: 'Pause'
+      }]
+    }],
+   // Finally, add the slider and use `pad` to position it
+   // nicely next to the buttons.
+    sliders: [{
+      pad: {l: 0, t: 0},
+      currentvalue: {
+        visible: true,
+        prefix: 'Time Remaining: ',
+        xanchor: 'right',
+        font: {size: 20, color: '#666'}
+      },
+      steps: sliderSteps
+    }]
+    };
+frames = [""" % (','.join([x.replace(' ','') + str(maxframe) for x in countries]), continent, title))
+        for i in range(0,maxframe+1):
+            f.write("""{data: [truth,%s], name: "frame%d"},
+""" % (','.join([x.replace(' ','') + str(i) for x in countries]), i))
+
+        f.write("""]
+Plotly.newPlot('%s', {data: traces, layout: layout, frames: frames})""" % fname)
+
 
 def nextColor(color_idx, num_colors):
     spread = 11
@@ -373,6 +497,8 @@ admin_to_country = {}
 num_colors = 49.
 color_idx = 0
 dpi = 250
+timestep = 0.25
+
 
 mapFilter = '' if (sys.argv) == 1 else sys.argv[1]
 initCount() 
@@ -444,7 +570,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 anim_name = 'animation_' + continent + '_' + country + '_' + stripSpecial(entry.replace(' ','-').replace('/','-'))
                 admin = "N/A" if 'admin' not in data[entry] else data[entry]['admin']
                 reghist = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (fname, fname)
-                anim = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.gif', continent + '.jpg')
+                anim = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.html', continent + '.jpg')
                 link = "https://en.wikipedia.org/wiki/Special:Search?search=" + stripSpecial(entry) + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
                 linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, data[entry]['city']) 
                 addJs('"Entry","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
@@ -457,14 +583,13 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     plt.clf()
                     plt.close()
 
+                initAnim(anim_name, timestep)
                 true_x, true_y = (0,0) if "true_lat" not in data[entry] else geoToMerc(continent, data[entry]["true_lat"], data[entry]["true_lon"]) 
+                addFrame(anim_name, "truth", "truth", [true_x], [900 - true_y], 'size: 8, symbol: \'star-open\', color: \'black\'')
                 continentTrueXs.append(true_x)
                 continentTrueYs.append(true_y)
                 if (generate_gifs):
                     # Generate animation
-                    fileList = glob.glob(outdir_prefix + '/plots/raw_animation_' + continent + '*')
-                    for filePath in fileList:
-                        os.remove(filePath)
                     lats = data[entry]['lats']
                     lons = data[entry]['lons']
                     times = data[entry]['times']
@@ -473,6 +598,8 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     times = [l for l,x in zip(times,lats) if x != "x"]
                     player_countries = [l for l,x in zip(player_countries,lats) if x != "x"]
                     lats = [x for x in lats if x != "x"]
+                    x_by_country = {}
+                    y_by_country = {}
                     if (aggregate_name in aggregate_lats): 
                         aggregate_lats[aggregate_name] = aggregate_lats[aggregate_name] + lats
                         aggregate_lons[aggregate_name] = aggregate_lons[aggregate_name] + lons
@@ -484,66 +611,27 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                         aggregate_lats[aggregate_name] = lats
                         aggregate_times[aggregate_name] = times
                         aggregate_player_countries[aggregate_name] = player_countries
-                    timestep = 0.5
-                    final_frames = 1
-                    plt.figure(figsize=(MAP_WIDTH/dpi, MAP_HEIGHT/dpi), dpi=dpi)
-                    plt.imshow(continent_map)
-                    ax = plt.gca()
-                    plt.ylim([MAP_HEIGHT,0])
-                    plt.xlim([0,MAP_WIDTH])
-                    plt.title(entry)
-                    plt.axis('off')
-                    plt.scatter([true_x], [true_y], marker='*', color='w', s = 20, edgecolors = 'black')
-                    frame = 0
-                    legend_countries = []
-                    player_country_colors = {}
-                    color_idx = 0
-                    patchList = []
+                    all_countries = []
                     for c in player_countries:
-                        if (c not in player_country_colors):
-                            player_country_colors[c] = nextColor(color_idx, num_colors)
-                            color_idx = (color_idx + 1) % num_colors
-                        if (c not in legend_countries):
-                            legend_countries.append(c)
-                            dk = patches.Patch(color=player_country_colors[c], label=c)
-                            patchList.append(dk)
-                    # lines = [Line2D([0], [0], color=c, linewidth=3, linestyle='--') for c in colors]
-                    plt.legend(handles=patchList, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=3, title_fontsize=3, title='Player Country')
-                    rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#17eb5e',facecolor='#17eb5e')
-                    ax.add_patch(rect)                
-                    for t in np.arange(10, 0, -timestep):
+                        if (c not in all_countries):
+                            all_countries.append(c)
+                            x_by_country[c] = []
+                            y_by_country[c] = []
+                    frame = 0
+                    for t in np.arange(10, -timestep, -timestep):
                         lowerbound = t - timestep
                         frame_lats = [x for x,stamp in zip(lats, times) if stamp > lowerbound and stamp <= t]
                         frame_lons = [x for x,stamp in zip(lons, times) if stamp > lowerbound and stamp <= t]
                         frame_player_countries = [x for x,stamp in zip(player_countries, times) if stamp > lowerbound and stamp <= t]
-                        frame_ctr = int(np.ceil(t))
                         for i in range(len(frame_lats)):
                             x,y = geoToMerc(continent, float(frame_lats[i]), float(frame_lons[i]))
-                            color = player_country_colors[frame_player_countries[i]]
-                            plt.scatter([x],[y], color = color, s = 1)
+                            x_by_country[frame_player_countries[i]] = x_by_country[frame_player_countries[i]] + [x]
+                            y_by_country[frame_player_countries[i]] = y_by_country[frame_player_countries[i]] + [900-y]
+                        for c in all_countries:
+                            addFrame(anim_name, c.replace(' ','') + str(frame), c, x_by_country[c], y_by_country[c], 'size: 5')
+                        frame = frame + 1
+                    finishAnim(anim_name, continent, entry, all_countries, frame - 1)
 
-                        time = plt.text(0, 60,str(frame_ctr),fontsize=12)
-                        plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
-                        frame = frame + 1
-                        time.set_visible(False)
-                    # make final frame
-                    rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#ffad99',facecolor='#ffad99')
-                    ax.add_patch(rect)
-                    plt.text(0, 60,0,fontsize=12)
-                    for i in range(final_frames):
-                        plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
-                        frame = frame + 1
-                    # export animation
-                    fp_in = outdir_prefix + "/plots/raw_" + anim_name + "_*.png"
-                    fp_out = outdir_prefix + "/plots/" + anim_name + ".gif"
-                    img, *imgs = [Image.open(f) for f in sorted(glob.glob(fp_in))]
-                    img.save(fp=fp_out, format='GIF', append_images=imgs,
-                             save_all=True, duration=timestep*1000, loop=1)
-                    plt.clf()
-                    plt.close()
-                    fileList = glob.glob(outdir_prefix + '/plots/raw_animation_' + continent + '*')
-                    for filePath in fileList:
-                        os.remove(filePath)
 
             except Exception as e: # work on python 3.x
                 exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -608,69 +696,39 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
         
                     # Generate animation
                     if (generate_gifs):
-                        fileList = glob.glob(outdir_prefix + '/plots/raw_animation_' + continent + '*')
-                        for filePath in fileList:
-                            os.remove(filePath)
+                        initAnim(anim_name, timestep)
+                        addFrame(anim_name, "truth", "truth", [], [], 'size: 8, symbol: \'star-open\', color: \'black\'')
                         lats = aggregate_lats[aggregate_name]
                         lons = aggregate_lons[aggregate_name]
                         times = aggregate_times[aggregate_name]
                         player_countries = aggregate_player_countries[aggregate_name]
-                        timestep = 0.25
-                        final_frames = 30
-                        plt.figure(figsize=(MAP_WIDTH/dpi, MAP_HEIGHT/dpi), dpi=dpi)
-                        plt.imshow(continent_map)
-                        ax = plt.gca()
-                        plt.ylim([MAP_HEIGHT,0])
-                        plt.xlim([0,MAP_WIDTH])
-                        plt.title(aggregate_name)
-                        plt.axis('off')
-                        frame = 0
-                        legend_countries = []
-                        patchList = []
+                        lons = [l for l,x in zip(lons,lats) if x != "x"]
+                        times = [l for l,x in zip(times,lats) if x != "x"]
+                        player_countries = [l for l,x in zip(player_countries,lats) if x != "x"]
+                        lats = [x for x in lats if x != "x"]
+                        x_by_country = {}
+                        y_by_country = {}
+                        all_countries = []
                         for c in player_countries:
-                            if (c not in player_country_colors):
-                                player_country_colors[c] = nextColor(color_idx, num_colors)
-                                color_idx = (color_idx + 1) % num_colors
-                            if (c not in legend_countries):
-                                legend_countries.append(c)
-                                dk = patches.Patch(color=player_country_colors[c], label=c)
-                                patchList.append(dk)
-                        # lines = [Line2D([0], [0], color=c, linewidth=3, linestyle='--') for c in colors]
-                        plt.legend(handles=patchList, loc='center left', bbox_to_anchor=(1, 0.5), fontsize=3, title_fontsize=3, title='Player Country')
-                        rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#17eb5e',facecolor='#17eb5e')
-                        ax.add_patch(rect)
-                        for t in np.arange(10, 0, -timestep):
+                            if (c not in all_countries):
+                                all_countries.append(c)
+                                x_by_country[c] = []
+                                y_by_country[c] = []
+                        frame = 0
+                        for t in np.arange(10, -timestep, -timestep):
                             lowerbound = t - timestep
                             frame_lats = [x for x,stamp in zip(lats, times) if stamp > lowerbound and stamp <= t]
                             frame_lons = [x for x,stamp in zip(lons, times) if stamp > lowerbound and stamp <= t]
                             frame_player_countries = [x for x,stamp in zip(player_countries, times) if stamp > lowerbound and stamp <= t]
-                            frame_ctr = int(np.ceil(t))
                             for i in range(len(frame_lats)):
                                 x,y = geoToMerc(continent, float(frame_lats[i]), float(frame_lons[i]))
-                                color = player_country_colors[frame_player_countries[i]]
-                                plt.scatter([x],[y], color = color, s = 1)
-                            time = plt.text(0, 60,str(frame_ctr),fontsize=12)
-                            plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
+                                x_by_country[frame_player_countries[i]] = x_by_country[frame_player_countries[i]] + [x]
+                                y_by_country[frame_player_countries[i]] = y_by_country[frame_player_countries[i]] + [900-y]
+                            for c in all_countries:
+                                addFrame(anim_name, c.replace(' ','') + str(frame), c, x_by_country[c], y_by_country[c], 'size: 5')
                             frame = frame + 1
-                            time.set_visible(False)
-                        # make final frame
-                        rect = patches.Rectangle((0,0),80,80,linewidth=1,edgecolor='#ffad99',facecolor='#ffad99')
-                        ax.add_patch(rect)
-                        plt.text(0, 60,0,fontsize=12)
-                        for i in range(final_frames):
-                            plt.savefig(outdir_prefix + '/plots/raw_' + anim_name + "_" + '%03d' % frame + ".png", optimize=True)
-                            frame = frame + 1
-                        # export animation
-                        fp_in = outdir_prefix + "/plots/raw_" + anim_name + "_*.png"
-                        fp_out = outdir_prefix + "/plots/" + anim_name + ".gif"
-                        img, *imgs = [Image.open(f) for f in sorted(glob.glob(fp_in))]
-                        img.save(fp=fp_out, format='GIF', append_images=imgs,
-                                 save_all=True, duration=timestep*1000, loop=1)
-                        plt.clf()
-                        plt.close()
-                        fileList = glob.glob(outdir_prefix + '/plots/raw_animation_' + continent + '*')
-                        for filePath in fileList:
-                            os.remove(filePath)
+                        finishAnim(anim_name, continent, aggregate_name, all_countries, frame - 1)
+
                             
                 except Exception as e: # work on python 3.x
                     exc_type, exc_obj, exc_tb = sys.exc_info()
