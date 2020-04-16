@@ -464,13 +464,28 @@ var layout = {
       steps: sliderSteps
     }]
     };
-frames = [""" % (','.join([x.replace(' ','') + str(maxframe) for x in countries]), continent, title, stepsize * 1000))
+frames = [""" % (','.join([x.replace(' ','') + str(maxframe) for x in sorted(countries)]), continent, title, stepsize * 1000))
         for i in range(0,maxframe+1):
             f.write("""{data: [truth,%s], name: "frame%d"},
-""" % (','.join([x.replace(' ','') + str(i) for x in countries]), i))
+""" % (','.join([x.replace(' ','') + str(i) for x in sorted(countries)]), i))
 
         f.write("""]
-Plotly.newPlot('%s', {data: traces, layout: layout, frames: frames})""" % fname)
+Plotly.newPlot('%s', {data: traces, layout: layout, frames: frames})
+
+const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1; // hack for scaling
+var noScale = false;
+
+setInterval(() => {
+    // Set zoom for resolution
+    const scale = Math.floor(50*Math.max(0.6, Math.min(1, window.innerWidth / 1800)))/50;
+    document.documentElement.style.zoom = scale;
+    document.documentElement.style.MozTransform = "scale(" + scale + ")";
+    document.documentElement.style.MozTransformOrigin = "0 0";
+    console.log('hi')
+}, 1000);
+
+
+""" % fname)
 
 
 def nextColor(color_idx, num_colors):
