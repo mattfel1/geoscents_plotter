@@ -171,7 +171,19 @@ def writeIndex(countries):
     <meta property="og:image" content="http://geoscents.net/resources/ogimage.png" />
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+<style>
+table, td, th {
+  border: 1px solid black;
+}
 
+table {
+  border-collapse: collapse;
+}
+
+th {
+  height: 50px;
+}
+</style>
 </head>
 <body>
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
@@ -193,10 +205,10 @@ NOTE: distance data was collected for a while before lat/lon data started gettin
 <br><br>
 This page is updated approximately every 8 hours.  Raw data can be found <a href="https://github.com/mattfel1/geoscents_stats">here</a> and is updated approximately every 8 hours.  <br><br>
 Players from the following countries have contributed to this database: <br><br>
-<table style="border: 1px solid black, border-collapse: collapse">
-  <tr style="border: 1px solid black">
-    <th style="border: 1px solid black">Country</th>
-    <th style="border: 1px solid black"># Clicks</th> 
+<table>
+  <tr>
+    <th>Country</th>
+    <th># Clicks</th> 
   </tr>
 %s
 </table>
@@ -511,7 +523,7 @@ pathlist = Path('.').glob('**/*.json')
 sorted_countries = []
 with open('./player_countries.csv') as fp:
     for cnt, line in enumerate(fp):
-        sorted_countries.append("""<tr style="border: 1px solid black"><td style="border: 1px solid black">""" + ','.join(line.split(',')[0:-1]) + """</td><td style="border: 1px solid black">""" + line.split(',')[-1] + "</td></tr>\n")
+        sorted_countries.append("""<tr><td>""" + ','.join(line.split(',')[0:-1]) + """</td><td>""" + line.split(',')[-1] + "</td></tr>\n")
 
 writeIndex('\n'.join(sorted_countries))
 writeCss()
