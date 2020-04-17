@@ -192,7 +192,15 @@ def writeIndex(countries):
 NOTE: distance data was collected for a while before lat/lon data started getting collected. This is why the histograms show more data points than the animations.
 <br><br>
 This page is updated approximately every 8 hours.  Raw data can be found <a href="https://github.com/mattfel1/geoscents_stats">here</a> and is updated approximately every 8 hours.  <br><br>
-Players from the following countries have contributed to this database, sorted by number of clicks from that country: <br><ol>%s</ol>
+Players from the following countries have contributed to this database: <br><br>
+<table style="border: 1px solid black, border-collapse: collapse">
+  <tr style="border: 1px solid black">
+    <th style="border: 1px solid black">Country</th>
+    <th style="border: 1px solid black"># Clicks</th> 
+  </tr>
+%s
+</table>
+
 <script src="counts.js"></script>
 </body>
 </html>
@@ -503,7 +511,7 @@ pathlist = Path('.').glob('**/*.json')
 sorted_countries = []
 with open('./player_countries.csv') as fp:
     for cnt, line in enumerate(fp):
-        sorted_countries.append("<li>" + ','.join(line.split(',')[0:-1]) + "</li>")
+        sorted_countries.append("""<tr style="border: 1px solid black"><td style="border: 1px solid black">""" + ','.join(line.split(',')[0:-1]) + """</td><td style="border: 1px solid black">""" + line.split(',')[-1] + "</td></tr>\n")
 
 writeIndex('\n'.join(sorted_countries))
 writeCss()
@@ -601,7 +609,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
 
                 initAnim(anim_name, timestep)
                 true_x, true_y = (0,0) if "true_lat" not in data[entry] else geoToMerc(continent, data[entry]["true_lat"], data[entry]["true_lon"]) 
-                addFrame(anim_name, "truth", "truth", [true_x], [900 - true_y], 'size: 8, symbol: \'star-open\', color: \'black\'')
+                addFrame(anim_name, "truth", "truth", [true_x], [900 - true_y], 'size: 9, symbol: \'star-open\', color: \'black\'')
                 continentTrueXs.append(true_x)
                 continentTrueYs.append(true_y)
                 if (generate_gifs):
@@ -644,7 +652,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                             x_by_country[frame_player_countries[i]] = x_by_country[frame_player_countries[i]] + [x]
                             y_by_country[frame_player_countries[i]] = y_by_country[frame_player_countries[i]] + [900-y]
                         for c in all_countries:
-                            addFrame(anim_name, c.replace(' ','') + str(frame), c, x_by_country[c], y_by_country[c], 'size: 5')
+                            addFrame(anim_name, c.replace(' ','') + str(frame), c, x_by_country[c], y_by_country[c], 'size: 7')
                         frame = frame + 1
                     finishAnim(anim_name, continent, entry, all_countries, frame - 1, timestep)
 
