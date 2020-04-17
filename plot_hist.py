@@ -207,6 +207,7 @@ This page is updated approximately every 8 hours.  Raw data can be found <a href
 Players from the following countries have contributed to this database: <br><br>
 <table>
   <tr>
+    <th> </th>
     <th>Country</th>
     <th># Clicks</th> 
   </tr>
@@ -521,9 +522,11 @@ def nextColor(color_idx, num_colors):
 ########
 pathlist = Path('.').glob('**/*.json')
 sorted_countries = []
+i = 0
 with open('./player_countries.csv') as fp:
     for cnt, line in enumerate(fp):
-        sorted_countries.append("""<tr><td>""" + ','.join(line.split(',')[0:-1]) + """</td><td>""" + line.split(',')[-1] + "</td></tr>\n")
+        i = i + 1
+        sorted_countries.append(("""<tr><td>%d.""" % i) + """</td><td>""" + ','.join(line.split(',')[0:-1]) + """</td><td>""" + line.split(',')[-1] + "</td></tr>\n")
 
 writeIndex('\n'.join(sorted_countries))
 writeCss()
