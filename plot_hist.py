@@ -203,7 +203,7 @@ th {
 <small>(Last updated %s)</small><br><br>
 NOTE: distance data was collected for a while before lat/lon data started getting collected. This is why the histograms show more data points than the animations.
 <br><br>
-This page is updated approximately every 8 hours.  Raw data can be found <a href="https://github.com/mattfel1/geoscents_stats">here</a> and is updated approximately every 8 hours.  <br><br>
+This page is updated approximately every 8 hours.  Raw data can be found <a href="https://github.com/mattfel1/geoscents_stats">here</a>.  <br><br>
 Players from the following countries have contributed to this database: <br><br>
 <table>
   <tr>
@@ -442,7 +442,7 @@ var layout = {
         "layer": "below"
       }
       ],
-  title:'%s',
+  title:"%s",
   hovermode: 'closest',
     updatemenus: [{
       x: 0,
@@ -525,8 +525,11 @@ sorted_countries = []
 i = 0
 with open('./player_countries.csv') as fp:
     for cnt, line in enumerate(fp):
-        i = i + 1
-        sorted_countries.append(("""<tr><td>%d.""" % i) + """</td><td>""" + ','.join(line.split(',')[0:-1]) + """</td><td>""" + line.split(',')[-1] + "</td></tr>\n")
+        if ("Total" in line.split(',')[0]):
+            sorted_countries.append("""<tr><td> </td><td><b>""" + ','.join(line.split(',')[0:-1]) + """</b></td><td><b>""" + line.split(',')[-1] + "</b></td></tr>\n")
+        else:
+            i = i + 1
+            sorted_countries.append(("""<tr><td>%d.""" % i) + """</td><td>""" + ','.join(line.split(',')[0:-1]) + """</td><td>""" + line.split(',')[-1] + "</td></tr>\n")
 
 writeIndex('\n'.join(sorted_countries))
 writeCss()
