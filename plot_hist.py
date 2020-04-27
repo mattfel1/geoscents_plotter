@@ -776,6 +776,8 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                     print(exc_type, fname, exc_tb.tb_lineno)
+                    if hasattr(e, 'message'):
+                        print(e.message)
 
 
 
