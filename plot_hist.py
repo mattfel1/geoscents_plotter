@@ -360,7 +360,7 @@ def writeHtml(continent):
 <button id="entry" class="filter-btn">Show Entries Only</button>
 <table id="%s" class="display" width="100%%"></table>
 <br><br>
-<a href="all_%s.jpg">cheatsheet</a>
+<a href="all_%s.jpg" style="color:#F0F0F0;">cheatsheet</a>
 <script  type="text/javascript" src="%s.js"></script>
 <script src="counts.js"></script>
 </body>
