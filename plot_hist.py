@@ -191,6 +191,7 @@ th {
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="theme.css">
 <button class="lobby-btn" onclick="window.location.href = 'http://geoscents.net';">Back to Game</button>
+<button class="room-btn" onclick="window.location.href = 'index.html';">Home</button>
 <button class="room-btn" onclick="window.location.href = 'World.html';">World<br><small><div id="World_count"></div></small></button>
 <button class="room-btn" onclick="window.location.href = 'Trivia.html';">Trivia<br><small><div id="Trivia_count"></div></small></button>
 <button class="room-btn" onclick="window.location.href = 'Europe.html';">Europe<br><small><div id="Europe_count"></div></small></button>
@@ -346,6 +347,7 @@ def writeHtml(continent):
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="theme.css">
 <button class="lobby-btn" onclick="window.location.href = 'http://geoscents.net';">Back to Game</button>
+<button class="special-room-btn" onclick="window.location.href = 'index.html';">Home</button>
 <button class="%sroom-btn" onclick="window.location.href = 'World.html';">World<br><small><div id="World_count"></div></small></button>
 <button class="%sroom-btn" onclick="window.location.href = 'Trivia.html';">Trivia<br><small><div id="Trivia_count"></div></small></button>
 <button class="%sroom-btn" onclick="window.location.href = 'Europe.html';">Europe<br><small><div id="Europe_count"></div></small></button>
