@@ -244,7 +244,7 @@ $(document).ready(function() {
         deferRender:    true,
         "order": [[1, 'des']],
         columns: [
-            { title: "", "width": "1%"},
+            { title: "", "width": "1%%"},
             { title: "Player Country", "width": "5%%"},
             { title: "Total # Clicks", "width": "5%%" },
             { title: "World<br>(avg. error, km)", "width": "5%%"},
