@@ -233,7 +233,7 @@ $(document).ready(function() {
     const table = $('#index').DataTable( {
         data: dataSet,
         "lengthChange": true,
-        "pageLength": 50,
+        "pageLength": 100,
         "search": {
             "search": ".*",
             "regex": true
@@ -242,7 +242,7 @@ $(document).ready(function() {
         "stateDuration": 60 * 5,
         "dom": '<"top"f>rt<"bottom"ipl><"clear">',
         deferRender:    true,
-        "order": [[1, 'des']],
+        "order": [[2, 'des']],
         columns: [
             { title: "", "width": "1%%"},
             { title: "Player Country", "width": "5%%"},
@@ -261,7 +261,7 @@ $(document).ready(function() {
                 render: function (data, type, full, meta) {
                     return "<div class='text-wrap width-150'>" + data + "</div>";
                 },
-                targets: [2,3,4,5,6,7,8,9]
+                targets: [3,4,5,6,7,8,9,10]
             }
         ],
     } );
