@@ -206,20 +206,75 @@ You can opt-out of contributing to this database by typing /private in the chat 
 NOTE: distance data was collected for a while before lat/lon data started getting collected. This is why the histograms show more data points than the animations.
 <br><br>
 This page is updated approximately every 8 hours.  Raw data can be found <a href="https://github.com/mattfel1/geoscents_stats">here</a>.  <br><br>
-Players from the following countries have contributed to this database: <br><br>
-<table>
+
+<h3>Mean Error by Player Country</h3>
+<!--<table>
   <tr>
     <th> </th>
     <th>Country</th>
     <th># Clicks</th> 
   </tr>
-%s
-</table>
+s
+</table>-->
+<table id="index" class="display" width="75%%" align="left"></table>
+<br><br>
+
+<script  type="text/javascript" src="index.js"></script>
 
 <script src="counts.js"></script>
 </body>
 </html>
-""" % (update_stamp, countries))
+""" % (update_stamp))
+
+    with open(outdir_prefix + "/plots/index.js", 'w+') as f:
+        f.write("""
+$(document).ready(function() {
+    $("#all").css("background","yellow");
+    const table = $('#index').DataTable( {
+        data: dataSet,
+        "lengthChange": true,
+        "pageLength": 50,
+        "search": {
+            "search": ".*",
+            "regex": true
+        },
+        stateSave: true,
+        "stateDuration": 60 * 5,
+        "dom": '<"top"f>rt<"bottom"ipl><"clear">',
+        deferRender:    true,
+        "order": [[1, 'des']],
+        columns: [
+            { title: "Player Country", "width": "5%%"},
+            { title: "Total # Clicks", "width": "5%%" },
+            { title: "World<br>(avg. error, km)", "width": "5%%"},
+            { title: "Trivia<br>(avg. error, km)", "width": "5%%" },
+            { title: "Europe<br>(avg. error, km)", "width": "5%%" },
+            { title: "Africa<br>(avg. error, km)", "width": "5%%" },
+            { title: "Asia<br>(avg. error, km)", "width": "5%%" },
+            { title: "Oceania<br>(avg. error, km)", "width": "5%%"},
+            { title: "N. America<br>(avg. error, km)", "width": "5%%"},
+            { title: "S. America<br>(avg. error, km)", "width": "5%%"}
+        ],
+        columnDefs: [
+            {
+                render: function (data, type, full, meta) {
+                    return "<div class='text-wrap width-150'>" + data + "</div>";
+                },
+                targets: [2,3,4,5,6,7,8,9]
+            }
+        ],
+    } );
+    $(window).keydown(function(e){
+        if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
+            e.preventDefault();
+            $('#index_filter input').focus();
+            $('#index_filter input').select();
+        }
+    });
+} );
+
+var dataSet = [ %s ];
+""" % countries)
 
 def initCount():
     with open(outdir_prefix + "/plots/counts.js", 'w+') as f:
@@ -528,11 +583,12 @@ sorted_countries = []
 i = 0
 with open('./player_countries.csv') as fp:
     for cnt, line in enumerate(fp):
-        if ("Total" in line.split(',')[0]):
-            sorted_countries.append("""<tr><td> </td><td><b>""" + ','.join(line.split(',')[0:-1]) + """</b></td><td><b>""" + line.split(',')[-1] + "</b></td></tr>\n")
-        else:
-            i = i + 1
-            sorted_countries.append(("""<tr><td>%d.""" % i) + """</td><td>""" + ','.join(line.split(',')[0:-1]) + """</td><td>""" + line.split(',')[-1] + "</td></tr>\n")
+        sorted_countries.append(line)
+        # if ("Total" in line.split(',')[0]):
+        #     sorted_countries.append("""<tr><td> </td><td><b>""" + ','.join(line.split(',')[0:-1]) + """</b></td><td><b>""" + line.split(',')[-1] + "</b></td></tr>\n")
+        # else:
+        #     i = i + 1
+        #     sorted_countries.append(("""<tr><td>%d.""" % i) + """</td><td>""" + ','.join(line.split(',')[0:-1]) + """</td><td>""" + line.split(',')[-1] + "</td></tr>\n")
 
 writeIndex('\n'.join(sorted_countries))
 writeCss()
