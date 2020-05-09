@@ -455,18 +455,18 @@ def initAnim(fname, stepsize):
 </body>
 """ % (fname, fname + '.js'))
 
-def addFrame(fname, serieslabel, country, xdata, ydata, marker):
+def addFrame(fname, serieslabel, raw_country, numclicks, xdata, ydata, marker):
     with open(outdir_prefix + "/plots/" + fname + '.js', 'a') as f:
         f.write("""var %s = {
-  name: '%s',
+  name: '%s (%d)',
   x: [null,%s],
   y: [null,%s],
   mode: 'markers',
-  hoverinfo: 'name',
+  hoverinfo: %s,
   type: 'scatter', 
   marker: {%s}
 }
-""" % (serieslabel, country, ','.join([str(int(x)) for x in xdata]), ','.join([str(int(x)) for x in ydata]), marker))
+""" % (serieslabel, raw_country, numclicks ','.join([str(int(x)) for x in xdata]), ','.join([str(int(x)) for x in ydata]), raw_country marker))
 
 def finishAnim(fname, continent, title, countries, maxframe, stepsize):
     with open(outdir_prefix + "/plots/" + fname + '.js', 'a') as f:
@@ -685,7 +685,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
 
                 initAnim(anim_name, timestep)
                 true_x, true_y = (0,0) if "true_lat" not in data[entry] else geoToMerc(continent, data[entry]["true_lat"], data[entry]["true_lon"]) 
-                addFrame(anim_name, "truth", "truth", [true_x], [900 - true_y], 'size: 9, symbol: \'star-open\', color: \'black\'')
+                addFrame(anim_name, "truth", "truth", 1, [true_x], [900 - true_y], 'size: 9, symbol: \'star-open\', color: \'black\'')
                 continentTrueXs.append(true_x)
                 continentTrueYs.append(true_y)
                 if (generate_gifs):
@@ -730,7 +730,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                             x_by_country[frame_player_countries[i]] = x_by_country[frame_player_countries[i]] + [x]
                             y_by_country[frame_player_countries[i]] = y_by_country[frame_player_countries[i]] + [900-y]
                         for c in all_countries:
-                            addFrame(anim_name, c.replace(' ','') + str(frame), c + " (" + str(country_numclicks[c]) + ")", x_by_country[c], y_by_country[c], 'size: 5')
+                            addFrame(anim_name, c.replace(' ','') + str(frame), c, country_numclicks[c], x_by_country[c], y_by_country[c], 'size: 5')
                         frame = frame + 1
                     finishAnim(anim_name, continent, entry, all_countries, frame - 1, timestep)
 
@@ -801,7 +801,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     # Generate animation
                     if (generate_gifs):
                         initAnim(anim_name, timestep)
-                        addFrame(anim_name, "truth", "truth", [], [], 'size: 8, symbol: \'star-open\', color: \'black\'')
+                        addFrame(anim_name, "truth", "truth", 0, [], [], 'size: 8, symbol: \'star-open\', color: \'black\'')
                         lats = aggregate_lats[aggregate_name]
                         lons = aggregate_lons[aggregate_name]
                         times = aggregate_times[aggregate_name]
@@ -831,7 +831,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                                 x_by_country[frame_player_countries[i]] = x_by_country[frame_player_countries[i]] + [x]
                                 y_by_country[frame_player_countries[i]] = y_by_country[frame_player_countries[i]] + [900-y]
                             for c in all_countries:
-                                addFrame(anim_name, c.replace(' ','') + str(frame), c + "(" + str(country_numclicks[c]) + ")", x_by_country[c], y_by_country[c], 'size: 5')
+                                addFrame(anim_name, c.replace(' ','') + str(frame), c, country_numclicks[c], x_by_country[c], y_by_country[c], 'size: 5')
                             frame = frame + 1
                         finishAnim(anim_name, continent, aggregate_name, all_countries, frame - 1, timestep)
 
