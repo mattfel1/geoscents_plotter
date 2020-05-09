@@ -712,9 +712,11 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                         aggregate_times[aggregate_name] = times
                         aggregate_player_countries[aggregate_name] = player_countries
                     all_countries = []
+                    country_numclicks = {}
                     for c in player_countries:
                         if (c not in all_countries):
                             all_countries.append(c)
+                            country_numclicks[c] = player_countries.count(c)
                             x_by_country[c] = []
                             y_by_country[c] = []
                     frame = 0
@@ -728,7 +730,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                             x_by_country[frame_player_countries[i]] = x_by_country[frame_player_countries[i]] + [x]
                             y_by_country[frame_player_countries[i]] = y_by_country[frame_player_countries[i]] + [900-y]
                         for c in all_countries:
-                            addFrame(anim_name, c.replace(' ','') + str(frame), c, x_by_country[c], y_by_country[c], 'size: 7')
+                            addFrame(anim_name, c.replace(' ','') + str(frame), c + " (" + str(country_numclicks[c]) + ")", x_by_country[c], y_by_country[c], 'size: 3')
                         frame = frame + 1
                     finishAnim(anim_name, continent, entry, all_countries, frame - 1, timestep)
 
@@ -811,9 +813,11 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                         x_by_country = {}
                         y_by_country = {}
                         all_countries = []
+                        country_numclicks = {}
                         for c in player_countries:
                             if (c not in all_countries):
                                 all_countries.append(c)
+                                country_numclicks[c] = player_countries.count(c)
                                 x_by_country[c] = []
                                 y_by_country[c] = []
                         frame = 0
@@ -827,7 +831,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                                 x_by_country[frame_player_countries[i]] = x_by_country[frame_player_countries[i]] + [x]
                                 y_by_country[frame_player_countries[i]] = y_by_country[frame_player_countries[i]] + [900-y]
                             for c in all_countries:
-                                addFrame(anim_name, c.replace(' ','') + str(frame), c, x_by_country[c], y_by_country[c], 'size: 5')
+                                addFrame(anim_name, c.replace(' ','') + str(frame), c + "(" + str(country_numclicks[c]) + ")", x_by_country[c], y_by_country[c], 'size: 3')
                             frame = frame + 1
                         finishAnim(anim_name, continent, aggregate_name, all_countries, frame - 1, timestep)
 
