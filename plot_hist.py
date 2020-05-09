@@ -459,14 +459,15 @@ def addFrame(fname, serieslabel, raw_country, numclicks, xdata, ydata, marker):
     with open(outdir_prefix + "/plots/" + fname + '.js', 'a') as f:
         f.write("""var %s = {
   name: '%s (%d)',
+  rawname: '%s',
   x: [null,%s],
   y: [null,%s],
   mode: 'markers',
-  hoverinfo: %s,
+  hoverinfo: 'name',
   type: 'scatter', 
   marker: {%s}
 }
-""" % (serieslabel, raw_country, numclicks ','.join([str(int(x)) for x in xdata]), ','.join([str(int(x)) for x in ydata]), raw_country marker))
+""" % (serieslabel, raw_country, numclicks, raw_country, ','.join([str(int(x)) for x in xdata]), ','.join([str(int(x)) for x in ydata]), marker))
 
 def finishAnim(fname, continent, title, countries, maxframe, stepsize):
     with open(outdir_prefix + "/plots/" + fname + '.js', 'a') as f:
@@ -597,7 +598,7 @@ admin_to_country = {}
 num_colors = 49.
 color_idx = 0
 dpi = 250
-timestep = 0.25
+timestep = 0.2
 
 
 mapFilter = '' if (sys.argv) == 1 else sys.argv[1]
