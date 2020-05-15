@@ -432,7 +432,7 @@ def initAnim(fname, stepsize):
   for (i = 0; i < %d; i++) {
     sliderSteps.push({
       method: 'animate',
-      label: 10 - i * %f,
+      label: Math.floor(10*(10 - i * %f)) / 10,
       args: [['frame' + (i)], {
         mode: 'immediate',
         transition: {duration: 0},
@@ -560,7 +560,6 @@ setInterval(() => {
     document.documentElement.style.zoom = scale;
     document.documentElement.style.MozTransform = "scale(" + scale + ")";
     document.documentElement.style.MozTransformOrigin = "0 0";
-    console.log('hi')
 }, 1000);
 
 
