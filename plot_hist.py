@@ -166,9 +166,9 @@ def writeIndex(countries):
     <meta name="description" content="Plots for Geoscents. An online multiplayer world geography game!  Test your knowledge of city locations." />
     <title>GeoScents Plots</title>
     <!-- Place this tag in your head or just before your close body tag. -->
-    <link rel="icon" type="image/png" href="http://geoscents.net/resources/favicon.png" sizes="48x48">
+    <link rel="icon" type="image/png" href="https://geoscents.net/resources/favicon.png" sizes="48x48">
     <meta name="GeoScents Plots" content="Plots for Geoscents.  An online multiplayer world geography game!  Test your knowledge of city locations. This is a recreation of the game Geosense from geosense.net.">
-    <meta property="og:image" content="http://geoscents.net/resources/ogimage.png" />
+    <meta property="og:image" content="https://geoscents.net/resources/ogimage.png" />
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <style>
@@ -190,7 +190,7 @@ th {
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="theme.css">
-<button class="lobby-btn" onclick="window.location.href = 'http://geoscents.net';">Back to Game</button>
+<button class="lobby-btn" onclick="window.location.href = 'https://geoscents.net';">Back to Game</button>
 <button class="special-room-btn" onclick="window.location.href = 'index.html';">Home</button>
 <button class="room-btn" onclick="window.location.href = 'World.html';">World<br><small><div id="World_count"></div></small></button>
 <button class="room-btn" onclick="window.location.href = 'Trivia.html';">Trivia<br><small><div id="Trivia_count"></div></small></button>
@@ -387,9 +387,9 @@ def writeHtml(continent):
     <meta name="description" content="Plots for Geoscents. An online multiplayer world geography game!  Test your knowledge of city locations." />
     <title>(%s) GeoScents Plots</title>
     <!-- Place this tag in your head or just before your close body tag. -->
-    <link rel="icon" type="image/png" href="http://geoscents.net/resources/favicon.png" sizes="48x48">
+    <link rel="icon" type="image/png" href="https://geoscents.net/resources/favicon.png" sizes="48x48">
     <meta name="(%s) GeoScents Plots" content="Plots for Geoscents.  An online multiplayer world geography game!  Test your knowledge of city locations. This is a recreation of the game Geosense from geosense.net.">
-    <meta property="og:image" content="http://geoscents.net/resources/ogimage.png" />
+    <meta property="og:image" content="https://geoscents.net/resources/ogimage.png" />
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 
@@ -400,7 +400,7 @@ def writeHtml(continent):
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="theme.css">
-<button class="lobby-btn" onclick="window.location.href = 'http://geoscents.net';">Back to Game</button>
+<button class="lobby-btn" onclick="window.location.href = 'https://geoscents.net';">Back to Game</button>
 <button class="room-btn" onclick="window.location.href = 'index.html';">Home</button>
 <button class="%sroom-btn" onclick="window.location.href = 'World.html';">World<br><small><div id="World_count"></div></small></button>
 <button class="%sroom-btn" onclick="window.location.href = 'Trivia.html';">Trivia<br><small><div id="Trivia_count"></div></small></button>
@@ -489,7 +489,7 @@ var layout = {
   height: 900,
   images: [
       {
-        "source": "http://geoscents.net/resources/%s.png",
+        "source": "https://geoscents.net/resources/%s.png",
         "xref": "x",
         "yref": "y",
         "x": 0,
