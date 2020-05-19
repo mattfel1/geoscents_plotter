@@ -233,7 +233,7 @@ $(document).ready(function() {
     const table = $('#index').DataTable( {
         data: dataSet,
         "lengthChange": true,
-        "pageLength": 100,
+        "pageLength": 200,
         "search": {
             "search": ".*",
             "regex": true
