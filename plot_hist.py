@@ -426,7 +426,7 @@ def writeHtml(continent):
 
 """ % (continent, continent, specialworld,specialtrivia,specialeurope,specialafrica,specialasia,specialoceania,specialnamerica,specialsamerica,continent,continent,continent, update_stamp, continent, continent, continent))
 
-def initAnim(fname, stepsize):
+def initAnim(fname, stepsize, flag):
     with open(outdir_prefix + "/plots/" + fname + '.js', 'w+') as f:
         f.write("""
   var sliderSteps = [];
@@ -447,6 +447,7 @@ def initAnim(fname, stepsize):
         f.write("""
 <head>
     <!-- Load plotly.js into the DOM -->
+    %s
     <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
 </head>
 
@@ -454,7 +455,7 @@ def initAnim(fname, stepsize):
     <div id='%s'><!-- Plotly chart will be drawn inside this DIV --></div>
     <script src='%s'></script>
 </body>
-""" % (fname, fname + '.js'))
+""" % (flag, fname, fname + '.js'))
 
 def addFrame(fname, serieslabel, raw_country, numclicks, xdata, ydata, marker):
     with open(outdir_prefix + "/plots/" + fname + '.js', 'a') as f:
@@ -677,7 +678,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 anim = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.html', continent + '.jpg')
                 link = "https://en.wikipedia.org/wiki/Special:Search?search=" + stripSpecial(entry) + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
                 linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, data[entry]['city']) 
-                flag = " " if (iso2 == 'NONE') else '<img src=\\"flags/%s.png\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px>' % iso2
+                flag = " " if (iso2 == 'NONE') else '<img src=\\"flags/%s.png\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=20px>' % iso2.lower()
                 addJs('"Entry","' + flag + '","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
 
                 if (entry_id == 1):
@@ -688,7 +689,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     plt.clf()
                     plt.close()
 
-                initAnim(anim_name, timestep)
+                initAnim(anim_name, timestep, flag)
                 true_x, true_y = (0,0) if "true_lat" not in data[entry] else geoToMerc(continent, data[entry]["true_lat"], data[entry]["true_lon"]) 
                 addFrame(anim_name, "truth", "truth", 1, [true_x], [900 - true_y], 'size: 9, symbol: \'star-open\', color: \'black\'')
                 continentTrueXs.append(true_x)
@@ -771,7 +772,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 try:
                     if (aggregate_name in admin_to_country):
                         country = admin_to_country[aggregate_name]
-                        iso2 = admin_to_iso2[aggregate_name]
+                        iso2 = admin_to_iso2[aggregate_name].lower()
                         admin = aggregate_name
                     else:
                         country = aggregate_name
@@ -797,7 +798,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     anim_name = 'animation_' + continent + '_' + aggregate_name.replace(' ','-').replace('/','-')
                     anim = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.html', continent + '.jpg')
                     link = "https://en.wikipedia.org/wiki/Special:Search?search=" + aggregate_name + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
-                    flag = " " if (iso2 == 'NONE') else '<img src=\\"flags/%s.png\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px>' % iso2
+                    flag = " " if (iso2.lower() == 'none') else '<img src=\\"flags/%s.png\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=20px>' % iso2
                     if (aggregate_name in admin_to_country):
                         linkedAdmin = '<a href=\\"%s\\">%s</a>' % (link, admin)  
                         linkedCountry = country
@@ -808,7 +809,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
         
                     # Generate animation
                     if (generate_gifs):
-                        initAnim(anim_name, timestep)
+                        initAnim(anim_name, timestep, flag)
                         addFrame(anim_name, "truth", "truth", 0, [], [], 'size: 8, symbol: \'star-open\', color: \'black\'')
                         lats = aggregate_lats[aggregate_name]
                         lons = aggregate_lons[aggregate_name]
