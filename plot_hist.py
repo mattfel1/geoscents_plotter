@@ -679,6 +679,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 link = "https://en.wikipedia.org/wiki/Special:Search?search=" + stripSpecial(entry) + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
                 linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, data[entry]['city']) 
                 flag = " " if (iso2 == 'NONE') else '<img src=\\"flags/%s.png\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=20px>' % iso2.lower()
+                bigflag = " " if (iso2.lower() == 'none') else '<img src="flags/%s.png" style="display:block;margin:0 auto" class="img-thumbnail" height=40px>' % iso2.lower()
                 addJs('"Entry","' + flag + '","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
 
                 if (entry_id == 1):
@@ -689,7 +690,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     plt.clf()
                     plt.close()
 
-                initAnim(anim_name, timestep, flag)
+                initAnim(anim_name, timestep, bigflag)
                 true_x, true_y = (0,0) if "true_lat" not in data[entry] else geoToMerc(continent, data[entry]["true_lat"], data[entry]["true_lon"]) 
                 addFrame(anim_name, "truth", "truth", 1, [true_x], [900 - true_y], 'size: 9, symbol: \'star-open\', color: \'black\'')
                 continentTrueXs.append(true_x)
@@ -799,6 +800,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     anim = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.html', continent + '.jpg')
                     link = "https://en.wikipedia.org/wiki/Special:Search?search=" + aggregate_name + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
                     flag = " " if (iso2.lower() == 'none') else '<img src=\\"flags/%s.png\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=20px>' % iso2
+                    bigflag = " " if (iso2.lower() == 'none') else '<img src="flags/%s.png" style="display:block;margin:0 auto" class="img-thumbnail" height=40px>' % iso2.lower()
                     if (aggregate_name in admin_to_country):
                         linkedAdmin = '<a href=\\"%s\\">%s</a>' % (link, admin)  
                         linkedCountry = country
@@ -809,7 +811,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
         
                     # Generate animation
                     if (generate_gifs):
-                        initAnim(anim_name, timestep, flag)
+                        initAnim(anim_name, timestep, bigflag)
                         addFrame(anim_name, "truth", "truth", 0, [], [], 'size: 8, symbol: \'star-open\', color: \'black\'')
                         lats = aggregate_lats[aggregate_name]
                         lons = aggregate_lons[aggregate_name]
