@@ -677,7 +677,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 anim = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.html', continent + '.jpg')
                 link = "https://en.wikipedia.org/wiki/Special:Search?search=" + stripSpecial(entry) + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
                 linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, data[entry]['city']) 
-                flag = '<img src=\\"../resources/flags/%s.png\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px>' % iso2
+                flag = '<img src=\\"flags/%s.png\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px>' % iso2
                 addJs('"Entry","' + flag + '","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
 
                 if (entry_id == 1):
@@ -797,7 +797,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     anim_name = 'animation_' + continent + '_' + aggregate_name.replace(' ','-').replace('/','-')
                     anim = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.html', continent + '.jpg')
                     link = "https://en.wikipedia.org/wiki/Special:Search?search=" + aggregate_name + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
-                    flag = '<img src=\\"../resources/flags/%s.png\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px>' % iso2
+                    flag = '<img src=\\"flags/%s.png\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px>' % iso2
                     if (aggregate_name in admin_to_country):
                         linkedAdmin = '<a href=\\"%s\\">%s</a>' % (link, admin)  
                         linkedCountry = country
