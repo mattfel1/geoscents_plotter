@@ -9,6 +9,7 @@
 #done
 #scp /home/mattfel/plots/*gif geoscents.net:~/plots/
 
+rsync --bwlimit=50000 -avzh /home/mattfel/plots/flags/* geoscents.net:~/plots/flags/
 rsync --bwlimit=50000 -avzh /home/mattfel/plots/*js geoscents.net:~/plots/
 rsync --bwlimit=50000 -avzh /home/mattfel/plots/*html geoscents.net:~/plots/
 rsync --bwlimit=50000 -avzh /home/mattfel/plots/*css geoscents.net:~/plots/

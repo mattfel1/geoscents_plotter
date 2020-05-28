@@ -108,7 +108,8 @@ $(document).ready(function() {
         deferRender:    true,
         "order": [[4, 'asc']],
         columns: [
-            { title: "Type", "width": "5%%"},
+            { title: "Type", "width": "3%%"},
+            { title: "Flag", "width": "3%%"},
             { title: "Country", "width": "5%%" },
             { title: "Admin", "width": "5%%"},
             { title: "City", "width": "10%%" },
@@ -123,7 +124,7 @@ $(document).ready(function() {
                 render: function (data, type, full, meta) {
                     return "<div class='text-wrap width-150'>" + data + "</div>";
                 },
-                targets: [2,3,4]
+                targets: [3,4,5]
             }
         ],
     } );
@@ -594,6 +595,7 @@ writeCss()
 
 print('Output dir = %s' % (outdir_prefix + '/plots/'))
 admin_to_country = {}
+admin_to_iso2 = {}
 num_colors = 49.
 color_idx = 0
 dpi = 250
@@ -632,11 +634,13 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
             # Create entry for this city
             try:
                 dist_data = data[entry]['dists']
+                iso2 = 'NONE' if ('iso2' in data[entry]) else data[entry]['iso2']
                 continent_count = continent_count + len(dist_data)
                 country = '-' if 'country' not in data[entry] else data[entry]['country']
                 if trackAdmin(country):
                     aggregate_name = data[entry]['admin']
                     admin_to_country[aggregate_name] = country
+                    admin_to_iso2[aggregate_name] = iso2
                 else:
                     aggregate_name = country
                 if (aggregate_name in aggregate_dists): 
@@ -673,7 +677,8 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 anim = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.html', continent + '.jpg')
                 link = "https://en.wikipedia.org/wiki/Special:Search?search=" + stripSpecial(entry) + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
                 linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, data[entry]['city']) 
-                addJs('"Entry","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
+                flag = '<img src=\\"../resources/flags/%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px>' % iso2
+                addJs('"Entry","' + flag + '","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
 
                 if (entry_id == 1):
                     plt.figure(figsize=(MAP_WIDTH/dpi, MAP_HEIGHT/dpi), dpi=dpi)
@@ -766,9 +771,11 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 try:
                     if (aggregate_name in admin_to_country):
                         country = admin_to_country[aggregate_name]
+                        iso2 = admin_to_iso2[aggregate_name]
                         admin = aggregate_name
                     else:
                         country = aggregate_name
+                        iso2 = 'NONE'
                     dist_data = aggregate_dists[aggregate_name]
                     mean_dist = np.mean(dist_data)
                     std_dist = np.std(dist_data)
@@ -790,6 +797,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     anim_name = 'animation_' + continent + '_' + aggregate_name.replace(' ','-').replace('/','-')
                     anim = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.html', continent + '.jpg')
                     link = "https://en.wikipedia.org/wiki/Special:Search?search=" + aggregate_name + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
+                    flag = '<img src=\\"../resources/flags/%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px>' % iso2
                     if (aggregate_name in admin_to_country):
                         linkedAdmin = '<a href=\\"%s\\">%s</a>' % (link, admin)  
                         linkedCountry = country
