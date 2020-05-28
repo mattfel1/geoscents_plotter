@@ -634,7 +634,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
             # Create entry for this city
             try:
                 dist_data = data[entry]['dists']
-                iso2 = 'NONE' if ('iso2' in data[entry]) else data[entry]['iso2']
+                iso2 = 'NONE' if (not 'iso2' in data[entry]) else data[entry]['iso2']
                 continent_count = continent_count + len(dist_data)
                 country = '-' if 'country' not in data[entry] else data[entry]['country']
                 if trackAdmin(country):
