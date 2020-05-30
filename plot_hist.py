@@ -636,12 +636,12 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
             try:
                 dist_data = data[entry]['dists']
                 iso2 = 'NONE' if (not 'iso2' in data[entry]) else data[entry]['iso2']
+                admin_to_iso2[aggregate_name] = iso2
                 continent_count = continent_count + len(dist_data)
                 country = '-' if 'country' not in data[entry] else data[entry]['country']
                 if trackAdmin(country):
                     aggregate_name = data[entry]['admin']
                     admin_to_country[aggregate_name] = country
-                    admin_to_iso2[aggregate_name] = iso2
                 else:
                     aggregate_name = country
                 if (aggregate_name in aggregate_dists): 
