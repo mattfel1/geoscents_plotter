@@ -774,11 +774,10 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 try:
                     if (aggregate_name in admin_to_country):
                         country = admin_to_country[aggregate_name]
-                        iso2 = admin_to_iso2[aggregate_name].lower()
                         admin = aggregate_name
                     else:
                         country = aggregate_name
-                        iso2 = 'NONE'
+                    iso2 = "NONE" if (aggregate_name not in admin_to_iso2) else admin_to_iso2[aggregate_name].lower()
                     dist_data = aggregate_dists[aggregate_name]
                     mean_dist = np.mean(dist_data)
                     std_dist = np.std(dist_data)
