@@ -4,6 +4,7 @@ import sys
 import os
 import json
 from pathlib import Path
+import random
 import urllib.request
 import re
 import subprocess
@@ -736,8 +737,9 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                         frame_player_countries = [x for x,stamp in zip(player_countries, times) if stamp > lowerbound and stamp <= t]
                         for i in range(len(frame_lats)):
                             x,y = geoToMerc(continent, float(frame_lats[i]), float(frame_lons[i]))
-                            x_by_country[frame_player_countries[i]] = x_by_country[frame_player_countries[i]] + [x]
-                            y_by_country[frame_player_countries[i]] = y_by_country[frame_player_countries[i]] + [900-y]
+                            fudge_x,fudge_y = random.uniform(0, 1), random.uniform(0, 1.2) # avoid grid points with fudge noise
+                            x_by_country[frame_player_countries[i]] = x_by_country[frame_player_countries[i]] + [x + fudge_x]
+                            y_by_country[frame_player_countries[i]] = y_by_country[frame_player_countries[i]] + [900-y + fudge_y]
                         for c in all_countries:
                             addFrame(anim_name, c.replace(' ','') + str(frame), c, country_numclicks[c], x_by_country[c], y_by_country[c], 'size: 5')
                         frame = frame + 1
