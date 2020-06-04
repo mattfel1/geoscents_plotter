@@ -496,6 +496,7 @@ var layout = {
         "yref": "y",
         "x": 0,
         "y": 900,
+        "opacity": 0.4,
         "sizex": 1530,
         "sizey": 900,
         "sizing": "stretch",
