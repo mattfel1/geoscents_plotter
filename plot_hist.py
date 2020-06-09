@@ -127,7 +127,7 @@ $(document).ready(function() {
                 },
                 targets: [3,4,5]
             },
-            { "type": "alt-string", targets: 2 }
+            { "type": "alt-string", targets: 1 }
         ],
     } );
     $('#aggregates').on('click', function () {
