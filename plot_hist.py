@@ -210,7 +210,7 @@ NOTE: distance data was collected for a while before lat/lon data started gettin
 <br><br>
 This page is updated approximately every 8 hours.  Raw data can be found <a href="https://github.com/mattfel1/geoscents_stats">here</a>.  <br><br>
 
-<h3>Mean Error by Player Country</h3>
+<h3>Mean Error by Player Country (<a href="growth.png">Collected Data Points Over Time</a>)</h3>
 <!--<table>
   <tr>
     <th> </th>
