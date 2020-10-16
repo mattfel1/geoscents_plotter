@@ -14,5 +14,6 @@ rsync --bwlimit=50000 -avzh /home/mattfel/plots/*js geoscents.net:~/plots/
 rsync --bwlimit=50000 -avzh /home/mattfel/plots/*html geoscents.net:~/plots/
 rsync --bwlimit=50000 -avzh /home/mattfel/plots/*css geoscents.net:~/plots/
 rsync --bwlimit=50000 -avzh /home/mattfel/plots/*jpg geoscents.net:~/plots/
+rsync --bwlimit=50000 -avzh /home/mattfel/plots/growth.png geoscents.net:~/plots/
 #rsync --bwlimit=50000 -avzh $1/plots/*gif geoscents.net:~/plots/
 
