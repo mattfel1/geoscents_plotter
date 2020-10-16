@@ -20,4 +20,7 @@ python3 plot_hist.py Trivia &
 
 wait
 
+# Plot growth
+bash plot_growth.sh
+
 bash transfer.sh
