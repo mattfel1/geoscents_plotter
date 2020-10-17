@@ -25,6 +25,5 @@ ax.xaxis.set_major_formatter(xfmt)
 plt.xticks( rotation=25 )
 
 plt.title('Number of recorded data points over time')
-plt.legend()
 plt.savefig('/home/mattfel/plots/growth.png', optimize=True)
 #plt.show()
