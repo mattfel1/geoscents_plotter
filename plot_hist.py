@@ -206,7 +206,6 @@ th {
 <h1>Choose a map from above to view a data table!</h1>
 <small>(Last updated %s)</small><br><br>
 You can opt-out of contributing to this database by typing /private in the chat box while playing the game. <br><br>
-NOTE: distance data was collected for a while before lat/lon data started getting collected. This is why the histograms show more data points than the animations.
 <br><br>
 This page is updated approximately every 8 hours.  Raw data can be found <a href="https://github.com/mattfel1/geoscents_stats">here</a>.  <br><br>
 
