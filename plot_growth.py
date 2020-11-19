@@ -30,8 +30,7 @@ for i in range(1, len(x_pdf)):
 	y_pdf.append(gain)
 	# print(" %d to %d = %d" % (x_pdf[i-1], x_pdf[i], gain))
 for i in range(0, len(x_pdf)):
-	print(x_pdf[i])
-	x_pdf_data.append(dt.datetime.fromtimestamp(int(x_pdf[i])))
+	x_pdf_data.append(dt.datetime.fromtimestamp(int(x_pdf[i] + seconds_per_batch)))
 
 
 # Plot cdf
