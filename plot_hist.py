@@ -491,8 +491,8 @@ def addMean(fname, xmean, ymean, xvar, yvar):
         f.write("""
 let bubble = bubbles([%s, %s], %s)
 var average = {
-  name: 'average (1)',
-  rawname: 'average',
+  name: 'average joe (1)',
+  rawname: 'average joe',
             type: 'circle',
             xref: 'x',
             yref: 'y',
