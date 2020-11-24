@@ -442,6 +442,19 @@ def initAnim(fname, stepsize, flag):
       }]
     });
   }
+
+function bubbles(center, radius, n_points=20) {
+    var step = 1 / (n_points-1)
+    var x = []
+    var y = []
+    for (var p = 0; p < n_points; p++) {
+      x.push(center[0]+radius*Math.cos(2*3.14159*step*p))
+      y.push(center[1]+radius*Math.sin(2*3.14159*step*p))
+    }
+    return [x, y]
+  }
+
+
 """ % (10 / stepsize + 1, stepsize, stepsize * 1000))
 
     with open(outdir_prefix + "/plots/" + fname + '.html', 'w+') as f:
@@ -472,9 +485,30 @@ def addFrame(fname, serieslabel, raw_country, numclicks, xdata, ydata, marker):
 }
 """ % (serieslabel, raw_country, numclicks, raw_country, ','.join([str(int(x)) for x in xdata]), ','.join([str(int(x)) for x in ydata]), marker))
 
+
+def addMean(fname, xmean, ymean, xvar, yvar):
+    with open(outdir_prefix + "/plots/" + fname + '.js', 'a') as f:
+        f.write("""
+let bubble = bubbles([%s, %s], %s)
+var average = {
+  name: 'average (1)',
+  rawname: 'average',
+            type: 'circle',
+            xref: 'x',
+            yref: 'y',
+            x: bubble[0],
+            y: bubble[1],
+            opacity: 0.8,
+            fillcolor: 'blue',
+            line: {
+                color: 'blue'
+            }
+}
+""" % (xmean, ymean, xvar))
+
 def finishAnim(fname, continent, title, countries, maxframe, stepsize):
     with open(outdir_prefix + "/plots/" + fname + '.js', 'a') as f:
-        f.write("""var traces = [ truth, %s]
+        f.write("""var traces = [ truth, average, %s]
 var layout = {
   xaxis: {
     range: [ 0, 1530 ],
@@ -549,7 +583,7 @@ var layout = {
     };
 frames = [""" % (','.join([x.replace(' ','') + str(maxframe) for x in sorted(countries)]), continent, title, stepsize * 1000))
         for i in range(0,maxframe+1):
-            f.write("""{data: [truth,%s], name: "frame%d"},
+            f.write("""{data: [truth,average,%s], name: "frame%d"},
 """ % (','.join([x.replace(' ','') + str(i) for x in sorted(countries)]), i))
 
         f.write("""]
@@ -702,10 +736,10 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     # Generate animation
                     lats = data[entry]['lats']
                     lons = data[entry]['lons']
-                    mean_lat = np.mean(lats)
-                    mean_lon = np.mean(lons)
+                    mean_lat = np.mean([x for x in lats if type(x) == float])
+                    mean_lon = np.mean([x for x in lons if type(x) == float])
                     mean_x, mean_y = geoToMerc(continent, mean_lat, mean_lon) 
-                    addFrame(anim_name, "average", "average", 1, [mean_x], [900 - mean_y], 'size: 15, color: \'black\'')
+                    addMean(anim_name, mean_x, 900 - mean_y, 5, 10)
                     times = data[entry]['times']
                     player_countries = data[entry]['countries']
                     lons = [l for l,x in zip(lons,lats) if x != "x"]
@@ -821,6 +855,10 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                         addFrame(anim_name, "truth", "truth", 0, [], [], 'size: 8, symbol: \'star-open\', color: \'black\'')
                         lats = aggregate_lats[aggregate_name]
                         lons = aggregate_lons[aggregate_name]
+                        mean_lat = np.mean([x for x in lats if type(x) == float])
+                        mean_lon = np.mean([x for x in lons if type(x) == float])
+                        mean_x, mean_y = geoToMerc(continent, mean_lat, mean_lon) 
+                        addMean(anim_name, mean_x, 900 - mean_y, 5, 10)
                         times = aggregate_times[aggregate_name]
                         player_countries = aggregate_player_countries[aggregate_name]
                         lons = [l for l,x in zip(lons,lats) if x != "x"]
