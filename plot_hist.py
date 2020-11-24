@@ -702,6 +702,10 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     # Generate animation
                     lats = data[entry]['lats']
                     lons = data[entry]['lons']
+                    mean_lat = np.mean(lats)
+                    mean_lon = np.mean(lons)
+                    mean_x, mean_y = geoToMerc(continent, mean_lat, mean_lon) 
+                    addFrame(anim_name, "average", "average", 1, [mean_x], [900 - mean_y], 'size: 15, color: \'black\'')
                     times = data[entry]['times']
                     player_countries = data[entry]['countries']
                     lons = [l for l,x in zip(lons,lats) if x != "x"]
