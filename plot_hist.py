@@ -739,7 +739,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     mean_lat = np.mean([x for x in lats if type(x) == float])
                     mean_lon = np.mean([x for x in lons if type(x) == float])
                     mean_x, mean_y = geoToMerc(continent, mean_lat, mean_lon) 
-                    addMean(anim_name, mean_x, 900 - mean_y, 2, 2)
+                    # addMean(anim_name, mean_x, 900 - mean_y, 2, 2)
                     times = data[entry]['times']
                     player_countries = data[entry]['countries']
                     lons = [l for l,x in zip(lons,lats) if x != "x"]
@@ -858,7 +858,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                         mean_lat = np.mean([x for x in lats if type(x) == float])
                         mean_lon = np.mean([x for x in lons if type(x) == float])
                         mean_x, mean_y = geoToMerc(continent, mean_lat, mean_lon) 
-                        addMean(anim_name, mean_x, 900 - mean_y, 2, 2)
+                        # addMean(anim_name, mean_x, 900 - mean_y, 2, 2)
                         times = aggregate_times[aggregate_name]
                         player_countries = aggregate_player_countries[aggregate_name]
                         lons = [l for l,x in zip(lons,lats) if x != "x"]
