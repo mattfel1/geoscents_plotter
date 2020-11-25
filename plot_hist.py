@@ -508,7 +508,8 @@ var average = {
 
 def finishAnim(fname, continent, title, countries, maxframe, stepsize):
     with open(outdir_prefix + "/plots/" + fname + '.js', 'a') as f:
-        f.write("""var traces = [ truth, average, %s]
+        # f.write("""var traces = [ truth, average, %s]
+        f.write("""var traces = [ truth, %s]
 var layout = {
   xaxis: {
     range: [ 0, 1530 ],
@@ -583,7 +584,8 @@ var layout = {
     };
 frames = [""" % (','.join([x.replace(' ','') + str(maxframe) for x in sorted(countries)]), continent, title, stepsize * 1000))
         for i in range(0,maxframe+1):
-            f.write("""{data: [truth,average,%s], name: "frame%d"},
+            # f.write("""{data: [truth,average,%s], name: "frame%d"},
+            f.write("""{data: [truth,%s], name: "frame%d"},
 """ % (','.join([x.replace(' ','') + str(i) for x in sorted(countries)]), i))
 
         f.write("""]
