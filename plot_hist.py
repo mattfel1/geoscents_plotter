@@ -702,7 +702,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                 plt.xlim([0,max(inliers)])
                 fname = 'entry_' + continent + '_' + data[entry]['country'] + '_' + entry + '.jpg'
                 fname = stripSpecial(fname.replace(' ','-').replace('/','-'))
-                plt.savefig(outdir_prefix + '/plots/' + fname, optimize=True)
+                plt.savefig(outdir_prefix + '/plots/' + fname)
                 plt.clf()
                 # # Interactive plot show
                 #plt.show(block=False)
@@ -805,7 +805,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
         for i in range(len(continentTrueXs)):
             x,y = continentTrueXs[i], continentTrueYs[i]
             plt.scatter([x], [y], marker='*', color='w', s = 20, edgecolors = 'black')
-        plt.savefig(outdir_prefix + '/plots/all_' + continent + ".jpg", optimize=True)
+        plt.savefig(outdir_prefix + '/plots/all_' + continent + ".jpg")
 
         # Add aggregate for each country
         if (continent != "Trivia"): 
@@ -835,7 +835,7 @@ for path in [x for x in pathlist if mapFilter in str(x)]:
                     plt.ylabel('# of players')
                     fname = 'country_' + continent + '_' + aggregate_name + '.jpg'
                     fname = stripSpecial(fname.replace(' ','-').replace('/','-'))
-                    plt.savefig(outdir_prefix + '/plots/' + fname, optimize=True)
+                    plt.savefig(outdir_prefix + '/plots/' + fname)
                     plt.clf()
                     reghist = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (fname, fname)
                     anim_name = 'animation_' + continent + '_' + aggregate_name.replace(' ','-').replace('/','-')
