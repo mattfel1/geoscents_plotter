@@ -74,6 +74,12 @@ def geoToMerc(room,lat,lon):
         min_lon = -140.
         max_lon = 17.
         lat_ts = 0.
+    elif (room == "Ukraine"):
+        zero_lat = 54.
+        max_lat = 43.2
+        min_lon = 17.7
+        max_lon = 45.
+        lat_ts = 0.
     # get col value
 
     if (lon < min_lon):
@@ -203,6 +209,7 @@ th {
 <button class="room-btn" onclick="window.location.href = 'Oceania.html';">Oceania<br><small><div id="Oceania_count"></div></small></button>
 <button class="room-btn" onclick="window.location.href = 'NAmerica.html';">N. America<br><small><div id="NAmerica_count"></div></small></button>
 <button class="room-btn" onclick="window.location.href = 'SAmerica.html';">S. America<br><small><div id="SAmerica_count"></div></small></button>
+<button class="room-btn" onclick="window.location.href = 'Ukraine.html';">Ukraine<br><small><div id="Ukraine_count"></div></small></button>
 <h1>Choose a map from above to view a data table!</h1>
 <small>(Last updated %s)</small><br><br>
 You can opt-out of contributing to this database by typing /private in the chat box while playing the game. <br><br>
@@ -256,7 +263,8 @@ $(document).ready(function() {
             { title: "Asia<br>(avg. error, km)", "width": "5%%" },
             { title: "Oceania<br>(avg. error, km)", "width": "5%%"},
             { title: "N. America<br>(avg. error, km)", "width": "5%%"},
-            { title: "S. America<br>(avg. error, km)", "width": "5%%"}
+            { title: "S. America<br>(avg. error, km)", "width": "5%%"},
+            { title: "Ukraine<br>(avg. error, km)", "width": "5%%"}
         ],
         columnDefs: [
             {
@@ -367,7 +375,7 @@ def finishJs(continent):
         f.write("""];""")
     
 def trackAdmin(country):
-    return country == 'United States' or country == 'Canada' or country == 'China' or country == 'India' or country == 'Brazil' or country == 'Russia' or country == 'Australia' or country == 'Indonesia'
+    return country == 'United States' or country == 'Canada' or country == 'China' or country == 'India' or country == 'Brazil' or country == 'Russia' or country == 'Australia' or country == 'Indonesia' or country == "Ukraine"
 
 def stripSpecial(x):
     # return re.sub(r'[^\x00-\x7F]','x', x)
@@ -383,6 +391,7 @@ def writeHtml(continent):
         specialoceania = 'special-' if continent == "Oceania" else ""
         specialnamerica = 'special-' if continent == "NAmerica" else ""
         specialsamerica = 'special-' if continent == "SAmerica" else ""
+        specialukraine = 'special-' if continent == "Ukraine" else ""
         f.write("""
 <!DOCTYPE html>
 <head prefix="og: http://ogp.me/ns#">
@@ -412,6 +421,7 @@ def writeHtml(continent):
 <button class="%sroom-btn" onclick="window.location.href = 'Oceania.html';">Oceania<br><small><div id="Oceania_count"></div></small></button>
 <button class="%sroom-btn" onclick="window.location.href = 'NAmerica.html';">N. America<br><small><div id="NAmerica_count"></div></small></button>
 <button class="%sroom-btn" onclick="window.location.href = 'SAmerica.html';">S. America<br><small><div id="SAmerica_count"></div></small></button>
+<button class="%sroom-btn" onclick="window.location.href = 'Ukraine.html';">Ukraine<br><small><div id="Ukraine_count"></div></small></button>
 <h1>Data Table for %s Map <!-- <a href="all_%s.jpg"><img src="all_%s.jpg" class="img-thumbnail" alt="link" height=75px></a> --> </h1>
 <small>(Last updated %s)</small><br>
 <button id="all" class="filter-btn">Show All</button>
@@ -425,7 +435,7 @@ def writeHtml(continent):
 </body>
 </html>
 
-""" % (continent, continent, specialworld,specialtrivia,specialeurope,specialafrica,specialasia,specialoceania,specialnamerica,specialsamerica,continent,continent,continent, update_stamp, continent, continent, continent))
+""" % (continent, continent, specialworld,specialtrivia,specialeurope,specialafrica,specialasia,specialoceania,specialnamerica,specialsamerica,specialukraine,continent,continent,continent, update_stamp, continent, continent, continent))
 
 def initAnim(fname, stepsize, flag):
     with open(outdir_prefix + "/plots/" + fname + '.js', 'w+') as f:

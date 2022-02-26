@@ -17,6 +17,7 @@ python3 plot_hist.py Oceania &
 python3 plot_hist.py World &
 sleep 10
 python3 plot_hist.py Trivia &
+python3 plot_hist.py Ukraine &
 
 wait
 
