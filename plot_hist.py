@@ -193,6 +193,8 @@ th {
   height: 50px;
 }
 </style>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6780905379201491"
+     crossorigin="anonymous"></script>
 </head>
 <body>
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
@@ -403,7 +405,10 @@ def writeHtml(continent):
     <meta property="og:image" content="https://geoscents.net/resources/ogimage.png" />
 <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6780905379201491"
+     crossorigin="anonymous"></script>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6780905379201491"
+     crossorigin="anonymous"></script>
 </head>
 <body>
 
