@@ -18,6 +18,12 @@ python3 plot_hist.py World &
 sleep 10
 python3 plot_hist.py Trivia &
 python3 plot_hist.py Ukraine &
+python3 plot_hist.py Japan &
+python3 plot_hist.py Canada &
+python3 plot_hist.py Romania &
+python3 plot_hist.py Kenya &
+python3 plot_hist.py Argentina &
+python3 plot_hist.py Australia &
 
 wait
 
