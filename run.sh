@@ -24,6 +24,9 @@ python3 plot_hist.py Romania &
 python3 plot_hist.py Kenya &
 python3 plot_hist.py Argentina &
 python3 plot_hist.py Australia &
+python3 plot_hist.py Japan &
+python3 plot_hist.py Indonesia &
+python3 plot_hist.py Egypt &
 
 wait
 
