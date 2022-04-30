@@ -542,7 +542,7 @@ var layout = {
   height: 900,
   images: [
       {
-        "source": "https://geoscents.net/resources/%s.png",
+        "source": "https://geoscents.net/resources/maps/%s.png",
         "xref": "x",
         "yref": "y",
         "x": 0,
