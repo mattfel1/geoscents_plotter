@@ -15,6 +15,7 @@ import numpy as np
 import pandas as pd
 import glob
 from PIL import Image
+import glob
 
 from time import gmtime, strftime
 import time
@@ -632,7 +633,8 @@ def nextColor(color_idx, num_colors):
 ########
 # MAIN #
 ########
-pathlist = Path('.').glob('**/*.json')
+pathlist = glob.glob("*.json"):
+
 sorted_countries = []
 i = 0
 with open('./player_countries.csv') as fp:
@@ -656,15 +658,15 @@ dpi = 250
 timestep = 0.2
 
 
-mapFilter = '' if (sys.argv) == 1 else sys.argv[1]
-initCount() 
-for path in [x for x in pathlist if mapFilter in str(x)]:
+for path in pathlist:
+    initCount() 
+    
     # because path is object not string
     file = str(path)
-    continent = file.replace('.json','')
+    continent = file.split('/')[-1].replace('.json','')
     continent_count = 0
     print(file)
-    continent_map = mpimg.imread('./' + continent + '.png')
+    continent_map = mpimg.imread('./' + continent + '_terrain.png')
     writeHtml(continent)
     initJs(continent) 
    
