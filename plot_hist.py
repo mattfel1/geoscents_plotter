@@ -633,7 +633,7 @@ def nextColor(color_idx, num_colors):
 ########
 # MAIN #
 ########
-pathlist = glob.glob("*.json"):
+pathlist = glob.glob("*.json")
 
 sorted_countries = []
 i = 0
