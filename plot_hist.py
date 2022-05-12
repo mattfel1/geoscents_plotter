@@ -845,7 +845,7 @@ for path in pathlist:
     continent = file.split('/')[-1].replace('.json','')
     continent_count = 0
     print(file)
-    continent_map = mpimg.imread('./' + continent + '_terrain.png')
+    continent_map = mpimg.imread('./' + continent.lower() + '_terrain.png')
     writeHtml(continent, header[2:-1])
     initJs(continent) 
    
