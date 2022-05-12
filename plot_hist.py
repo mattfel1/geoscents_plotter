@@ -27,62 +27,249 @@ outdir_prefix = '/home/mattfel/'
 generate_gifs = True
 
 def geoToMerc(room,lat,lon):
-    if (room == "World"):
-        zero_lat = 77.
-        max_lat = -65.5
-        min_lon = -180.
-        max_lon = 180.
-        lat_ts = 0.
-    elif (room == "NAmerica"):
-        zero_lat = 56.
-        max_lat = 10.
-        min_lon = -141.
-        max_lon = -43.
-        lat_ts = 0
-    elif (room == "Europe"):
-        zero_lat = 66.3
-        max_lat = 35.
-        min_lon = -36.
-        max_lon = 52.
-        lat_ts = 0.
-    elif (room == "Trivia"):
-        zero_lat = 81.
-        max_lat = -56.
-        min_lon = -180.
-        max_lon = 180.
-        lat_ts = 0.
-    elif (room == "Africa"):
-        zero_lat = 41.
-        max_lat = -36.
-        min_lon = -60.
-        max_lon = 82.
-        lat_ts = 0.
-    elif (room == "Asia"):
-        zero_lat = 61.
-        max_lat = -0.5
-        min_lon = 25.
-        max_lon = 158.
-        lat_ts = 0.
-    elif (room == "Oceania"):
-        zero_lat = 28
-        max_lat = -54.5
-        min_lon = 92.
-        max_lon = 252.
-        lat_ts = 0.
-    elif (room == "SAmerica"):
-        zero_lat = 24.
-        max_lat = -56.
-        min_lon = -140.
-        max_lon = 17.
-        lat_ts = 0.
-    elif (room == "Ukraine"):
-        zero_lat = 54.
-        max_lat = 43.2
-        min_lon = 17.7
-        max_lon = 45.
-        lat_ts = 0.
-    # get col value
+    # Copy from geoscents resources/constants.js
 
+    MAP_BOUNDS = {
+        "World": {
+            "min_lon": -180,
+            "max_lon": 180,
+            "max_lat": -65.5,
+            "min_lat": 77.2,
+            "lat_ts": 0
+        },
+        "World Capitals": {
+            "min_lon": -180,
+            "max_lon": 180,
+            "max_lat": -65.5,
+            "min_lat": 77.2,
+            "lat_ts": 0
+        },
+        "Trivia": {
+            "min_lon": -180,
+            "max_lon": 180,
+            "max_lat": -56.0,
+            "min_lat": 80.85,
+            "lat_ts": 0
+        },
+        "N. America": {
+            "min_lon": -141,
+            "max_lon": -43,
+            "max_lat": 10.0,
+            "min_lat": 56.0,
+            "lat_ts": 0
+        },
+        "S. America": {
+            "min_lon": -140,
+            "max_lon": 17,
+            "max_lat": -56.0,
+            "min_lat": 24.1,
+            "lat_ts": 0
+        },
+        "Europe": {
+            "min_lon": -36.3,
+            "max_lon": 52,
+            "max_lat": 35.0,
+            "min_lat": 66.3,
+            "lat_ts": 0
+        },
+        "Africa": {
+            "min_lon": -60,
+            "max_lon": 82,
+            "max_lat": -36.3,
+            "min_lat": 41.0,
+            "lat_ts": 0
+        },
+        "Asia": {
+            "min_lon": 25,
+            "max_lon": 158,
+            "max_lat": -1,
+            "min_lat": 61.05,
+            "lat_ts": 0
+        },
+        "Oceania": {
+            "min_lon": 92,
+            "max_lon": 252,
+            "max_lat": -54.5,
+            "min_lat": 28,
+            "lat_ts": 0
+        },
+        "Argentina": {
+            "min_lon": -102,
+            "max_lon": -20,
+            "max_lat": -56.5,
+            "min_lat": -20,
+            "lat_ts": 0
+        },
+        "Australia": {
+            "min_lon": 97,
+            "max_lon": 170,
+            "max_lat": -45.5,
+            "min_lat": -8,
+            "lat_ts": 0
+        },
+        "Canada": {
+            "min_lon": -152.1,
+            "max_lon": -40,
+            "max_lat": 38,
+            "min_lat": 72.5,
+            "lat_ts": 0
+        },
+        "Japan": {
+            "min_lon": 110,
+            "max_lon": 164.5,
+            "max_lat": 23.5,
+            "min_lat": 49,
+            "lat_ts": 0
+        },
+        "Kenya": {
+            "min_lon": 30,
+            "max_lon": 49,
+            "max_lat": -5.33,
+            "min_lat": 5.9,
+            "lat_ts": 0
+        },
+        "Romania": {
+            "min_lon": 18.8,
+            "max_lon": 33.7,
+            "max_lat": 43,
+            "min_lat": 49,
+            "lat_ts": 0
+        },
+        "Ukraine": {
+            "min_lon": 17.4,
+            "max_lon": 45.3,
+            "max_lat": 43.18,
+            "min_lat": 54,
+            "lat_ts": 0
+        },
+        "Peru": {
+            "min_lon": -92,
+            "max_lon": -55,
+            "max_lat": -19.5,
+            "min_lat": 2,
+            "lat_ts": 0
+        },
+        "Egypt": {
+            "min_lon": 16.5,
+            "max_lon": 41.7,
+            "max_lat": 20.81,
+            "min_lat": 34,
+            "lat_ts": 0
+        },
+        "Indonesia": {
+            "min_lon": 84.5,
+            "max_lon": 151,
+            "max_lat": -23.5,
+            "min_lat": 15,
+            "lat_ts": 0
+        },
+        "Spain": {
+            "min_lon": -14.18,
+            "max_lon": 8,
+            "max_lat": 35,
+            "min_lat": 45,
+            "lat_ts": 0
+        },
+        "China": {
+            "min_lon": 62,
+            "max_lon": 148,
+            "max_lat": 16.85,
+            "min_lat": 56,
+            "lat_ts": 0
+        },
+        "United States": {
+            "min_lon": -130,
+            "max_lon": -60,
+            "max_lat": 22,
+            "min_lat": 53.7,
+            "lat_ts": 0
+        },
+        "Iran": {
+            "min_lon": 36,
+            "max_lon": 72.6,
+            "max_lat": 24,
+            "min_lat": 42,
+            "lat_ts": 0
+        },
+        "Brazil": {
+            "min_lon": -91.7,
+            "max_lon": -17,
+            "max_lat": -34,
+            "min_lat": 8,
+            "lat_ts": 0
+        },
+        "Mexico": {
+            "min_lon": -120,
+            "max_lon": -80,
+            "max_lat": 13.61,
+            "min_lat": 35,
+            "lat_ts": 0
+        },
+        "India": {
+            "min_lon": 50,
+            "max_lon": 107.3,
+            "max_lat": 6,
+            "min_lat": 37,
+            "lat_ts": 0
+        },
+        "Italy": {
+            "min_lon": -2.1,
+            "max_lon": 25.4,
+            "max_lat": 36,
+            "min_lat": 48,
+            "lat_ts": 0
+        },
+        "United Kingdom": {
+            "min_lon": -19.55,
+            "max_lon": 15,
+            "max_lat": 49.5,
+            "min_lat": 61,
+            "lat_ts": 0
+        },
+        "Germany": {
+            "min_lon": -2.1,
+            "max_lon": 23,
+            "max_lat": 46.8,
+            "min_lat": 56,
+            "lat_ts": 0
+        },
+        "France": {
+            "min_lon": -10.2,
+            "max_lon": 17,
+            "max_lat": 41,
+            "min_lat": 52,
+            "lat_ts": 0
+        },
+        "Nigeria": {
+            "min_lon": -2.48,
+            "max_lon": 19,
+            "max_lat": 3.5,
+            "min_lat": 16,
+            "lat_ts": 0
+        },
+        "South Africa": {
+            "min_lon": 9,
+            "max_lon": 37,
+            "max_lat": -35.51,
+            "min_lat": -21,
+            "lat_ts": 0
+        },
+        "Vatican City": {
+            "min_lon": 12.440,
+            "max_lon": 12.4605,
+            "max_lat": 41.899, 
+            "min_lat": 41.908,
+            "lat_ts": 0
+        }
+        
+    }
+    zero_lat = MAP_BOUNDS[room]["min_lat"]
+    max_lat = MAP_BOUNDS[room]["max_lat"]
+    min_lon = MAP_BOUNDS[room]["min_lon"]
+    max_lon = MAP_BOUNDS[room]["max_lon"]
+    lat_ts = MAP_BOUNDS[room]["lat_ts"]
+    
+    # get col value
     if (lon < min_lon):
         col = (lon + 360 - min_lon) * (MAP_WIDTH / (max_lon - min_lon));
     else: 
@@ -203,17 +390,17 @@ th {
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="theme.css">
 <button class="lobby-btn" onclick="window.location.href = 'https://geoscents.net';">Back to Game</button>
-<button class="special-room-btn" onclick="window.location.href = 'index.html';">Home</button>
-<button class="room-btn" onclick="window.location.href = 'World.html';">World<br><small><div id="World_count"></div></small></button>
-<button class="room-btn" onclick="window.location.href = 'Trivia.html';">Trivia<br><small><div id="Trivia_count"></div></small></button>
-<button class="room-btn" onclick="window.location.href = 'Europe.html';">Europe<br><small><div id="Europe_count"></div></small></button>
-<button class="room-btn" onclick="window.location.href = 'Africa.html';">Africa<br><small><div id="Africa_count"></div></small></button>
-<button class="room-btn" onclick="window.location.href = 'Asia.html';">Asia<br><small><div id="Asia_count"></div></small></button>
-<button class="room-btn" onclick="window.location.href = 'Oceania.html';">Oceania<br><small><div id="Oceania_count"></div></small></button>
-<button class="room-btn" onclick="window.location.href = 'NAmerica.html';">N. America<br><small><div id="NAmerica_count"></div></small></button>
-<button class="room-btn" onclick="window.location.href = 'SAmerica.html';">S. America<br><small><div id="SAmerica_count"></div></small></button>
-<button class="room-btn" onclick="window.location.href = 'Ukraine.html';">Ukraine<br><small><div id="Ukraine_count"></div></small></button>
-<h1>Choose a map from above to view a data table!</h1>
+<button class="special-room-btn" onclick="window.location.href = 'index.html';">Home</button>""")
+        # skip first two columns in header
+        i = 0;
+        for x in countries[0]:
+            if (i > 2):
+                f.write("""<button class="room-btn" onclick="window.location.href = '""" + x + """.html';">""" + x + "<br><small><div id=\"" + x + """_count"></div></small></button>""")
+            i = i + 1
+
+
+
+        f.write("""<h1>Choose a map from above to view a data table!</h1>
 <small>(Last updated %s)</small><br><br>
 You can opt-out of contributing to this database by typing /private in the chat box while playing the game. <br><br>
 <br><br>
@@ -257,24 +444,25 @@ $(document).ready(function() {
         "order": [[2, 'des']],
         columns: [
             { title: "", "width": "1%%"},
-            { title: "Player Country", "width": "5%%"},
-            { title: "Total # Clicks", "width": "5%%" },
-            { title: "World<br>(avg. error, km)", "width": "5%%"},
-            { title: "Trivia<br>(avg. error, km)", "width": "5%%" },
-            { title: "Europe<br>(avg. error, km)", "width": "5%%" },
-            { title: "Africa<br>(avg. error, km)", "width": "5%%" },
-            { title: "Asia<br>(avg. error, km)", "width": "5%%" },
-            { title: "Oceania<br>(avg. error, km)", "width": "5%%"},
-            { title: "N. America<br>(avg. error, km)", "width": "5%%"},
-            { title: "S. America<br>(avg. error, km)", "width": "5%%"},
-            { title: "Ukraine<br>(avg. error, km)", "width": "5%%"}
-        ],
+            """)
+        i = 0
+        targets = []
+        for x in countries[0]:
+            f.write("{ title: \"" + x + "Player Country\", \"width\": \"5%%\"}")
+            if (i < len(countries[0] - 1)):
+                f.write(",")
+            if (i > 2):
+                targets.append(str(i))
+
+            i = i + 1
+
+        f.write("""],
         columnDefs: [
             {
                 render: function (data, type, full, meta) {
                     return "<div class='text-wrap width-150'>" + data + "</div>";
                 },
-                targets: [3,4,5,6,7,8,9,10]
+                targets: [""" + ",".join(targets) + """]
             }
         ],
     } );
@@ -384,17 +572,8 @@ def stripSpecial(x):
     # return re.sub(r'[^\x00-\x7F]','x', x)
     return re.sub(r'[^A-Za-z0-9\(\),. ]+','_',x)
 
-def writeHtml(continent):
+def writeHtml(continent, cols):
     with open(outdir_prefix + "/plots/" + continent + '.html', 'w+') as f:
-        specialworld = 'special-' if continent == "World" else ""
-        specialtrivia = 'special-' if continent == "Trivia" else ""
-        specialeurope = 'special-' if continent == "Europe" else ""
-        specialafrica = 'special-' if continent == "Africa" else ""
-        specialasia = 'special-' if continent == "Asia" else ""
-        specialoceania = 'special-' if continent == "Oceania" else ""
-        specialnamerica = 'special-' if continent == "NAmerica" else ""
-        specialsamerica = 'special-' if continent == "SAmerica" else ""
-        specialukraine = 'special-' if continent == "Ukraine" else ""
         f.write("""
 <!DOCTYPE html>
 <head prefix="og: http://ogp.me/ns#">
@@ -418,17 +597,12 @@ def writeHtml(continent):
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
 <link rel="stylesheet" href="theme.css">
 <button class="lobby-btn" onclick="window.location.href = 'https://geoscents.net';">Back to Game</button>
-<button class="room-btn" onclick="window.location.href = 'index.html';">Home</button>
-<button class="%sroom-btn" onclick="window.location.href = 'World.html';">World<br><small><div id="World_count"></div></small></button>
-<button class="%sroom-btn" onclick="window.location.href = 'Trivia.html';">Trivia<br><small><div id="Trivia_count"></div></small></button>
-<button class="%sroom-btn" onclick="window.location.href = 'Europe.html';">Europe<br><small><div id="Europe_count"></div></small></button>
-<button class="%sroom-btn" onclick="window.location.href = 'Africa.html';">Africa<br><small><div id="Africa_count"></div></small></button>
-<button class="%sroom-btn" onclick="window.location.href = 'Asia.html';">Asia<br><small><div id="Asia_count"></div></small></button>
-<button class="%sroom-btn" onclick="window.location.href = 'Oceania.html';">Oceania<br><small><div id="Oceania_count"></div></small></button>
-<button class="%sroom-btn" onclick="window.location.href = 'NAmerica.html';">N. America<br><small><div id="NAmerica_count"></div></small></button>
-<button class="%sroom-btn" onclick="window.location.href = 'SAmerica.html';">S. America<br><small><div id="SAmerica_count"></div></small></button>
-<button class="%sroom-btn" onclick="window.location.href = 'Ukraine.html';">Ukraine<br><small><div id="Ukraine_count"></div></small></button>
-<h1>Data Table for %s Map <!-- <a href="all_%s.jpg"><img src="all_%s.jpg" class="img-thumbnail" alt="link" height=75px></a> --> </h1>
+<button class="room-btn" onclick="window.location.href = 'index.html';">Home</button>""" % (continent, continent))
+        for x in cols:
+            btn_class = "special-room-btn" if continent == x else "room-btn"
+            f.write("""<button class='""" + btn_class + """' onclick="window.location.href = '""" + x + """.html';">""" + x + """<br><small><div id='""" + x + """_count'></div></small></button>""")
+
+        f.write("""<h1>Data Table for %s Map <!-- <a href="all_%s.jpg"><img src="all_%s.jpg" class="img-thumbnail" alt="link" height=75px></a> --> </h1>
 <small>(Last updated %s)</small><br>
 <button id="all" class="filter-btn">Show All</button>
 <button id="aggregates" class="filter-btn">Show Aggregates Only</button>
@@ -441,7 +615,7 @@ def writeHtml(continent):
 </body>
 </html>
 
-""" % (continent, continent, specialworld,specialtrivia,specialeurope,specialafrica,specialasia,specialoceania,specialnamerica,specialsamerica,specialukraine,continent,continent,continent, update_stamp, continent, continent, continent))
+""" % (continent,continent,continent, update_stamp, continent, continent, continent))
 
 def initAnim(fname, stepsize, flag):
     with open(outdir_prefix + "/plots/" + fname + '.js', 'w+') as f:
@@ -667,7 +841,7 @@ for path in pathlist:
     continent_count = 0
     print(file)
     continent_map = mpimg.imread('./' + continent + '_terrain.png')
-    writeHtml(continent)
+    writeHtml(continent, sorted_countries[0][2:-1])
     initJs(continent) 
    
 
