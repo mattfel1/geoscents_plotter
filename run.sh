@@ -8,7 +8,7 @@ git pull
 cd ~/geoscents_plotter
 cp ~/geoscents_stats/data/*.json . && rm metadata.json
 # Get player location data
-cp ~/geoscents_stats/player_countries.csv .
+cp ~/geoscents_stats/data/player_countries.csv .
 # Get maps
 cp ~/geoscents/resources/maps/*_terrain.png .
 

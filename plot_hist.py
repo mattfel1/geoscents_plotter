@@ -268,7 +268,7 @@ def geoToMerc(room,lat,lon):
     min_lon = MAP_BOUNDS[room]["min_lon"]
     max_lon = MAP_BOUNDS[room]["max_lon"]
     lat_ts = MAP_BOUNDS[room]["lat_ts"]
-    
+
     # get col value
     if (lon < min_lon):
         col = (lon + 360 - min_lon) * (MAP_WIDTH / (max_lon - min_lon));
@@ -354,7 +354,7 @@ $(document).ready(function() {
 var dataSet = [
 """ % (continent, continent, continent))
 
-def writeIndex(countries):
+def writeIndex(header, countries):
     with open(outdir_prefix + "/plots/index.html", 'w+') as f:
         f.write("""
 <!DOCTYPE html>
@@ -393,7 +393,7 @@ th {
 <button class="special-room-btn" onclick="window.location.href = 'index.html';">Home</button>""")
         # skip first two columns in header
         i = 0;
-        for x in countries[0]:
+        for x in header:
             if (i > 2):
                 f.write("""<button class="room-btn" onclick="window.location.href = '""" + x + """.html';">""" + x + "<br><small><div id=\"" + x + """_count"></div></small></button>""")
             i = i + 1
@@ -447,9 +447,10 @@ $(document).ready(function() {
             """)
         i = 0
         targets = []
-        for x in countries[0]:
-            f.write("{ title: \"" + x + "Player Country\", \"width\": \"5%%\"}")
-            if (i < len(countries[0] - 1)):
+        for x in header:
+            sfx = "<br>(avg. error, km)" if i > 1 else ""
+            f.write("{ title: \"" + x + sfx + "\", \"width\": \"5%%\"}")
+            if (i < len(countries[0]) - 1):
                 f.write(",")
             if (i > 2):
                 targets.append(str(i))
@@ -811,16 +812,20 @@ pathlist = glob.glob("*.json")
 
 sorted_countries = []
 i = 0
+header = ""
 with open('./player_countries.csv') as fp:
     for cnt, line in enumerate(fp):
-        sorted_countries.append(line)
+        if (cnt < 1):
+            header = line.replace("[","").replace("]","").split(",")
+        else:
+            sorted_countries.append(line)
         # if ("Total" in line.split(',')[0]):
         #     sorted_countries.append("""<tr><td> </td><td><b>""" + ','.join(line.split(',')[0:-1]) + """</b></td><td><b>""" + line.split(',')[-1] + "</b></td></tr>\n")
         # else:
         #     i = i + 1
         #     sorted_countries.append(("""<tr><td>%d.""" % i) + """</td><td>""" + ','.join(line.split(',')[0:-1]) + """</td><td>""" + line.split(',')[-1] + "</td></tr>\n")
 
-writeIndex('\n'.join(sorted_countries))
+writeIndex(header, '\n'.join(sorted_countries))
 writeCss()
 
 print('Output dir = %s' % (outdir_prefix + '/plots/'))
@@ -841,7 +846,7 @@ for path in pathlist:
     continent_count = 0
     print(file)
     continent_map = mpimg.imread('./' + continent + '_terrain.png')
-    writeHtml(continent, sorted_countries[0][2:-1])
+    writeHtml(continent, header[2:-1])
     initJs(continent) 
    
 
