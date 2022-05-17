@@ -44,4 +44,4 @@ wait
 # Plot growth
 bash plot_growth.sh
 
-bash transfer.sh
+# bash transfer.sh

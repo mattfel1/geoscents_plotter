@@ -395,7 +395,8 @@ th {
         i = 0;
         for x in header:
             if (i > 2):
-                f.write("""<button class="room-btn" onclick="window.location.href = '""" + x + """.html';">""" + x + "<br><small><div id=\"" + x + """_count"></div></small></button>""")
+                f.write("""<button class="room-btn" onclick="window.location.href = '""" + x + """.html';">""" + x + "<br><small><div id=\"" + x + """_count"></div></small></button>
+""")
             i = i + 1
 
 
@@ -449,9 +450,9 @@ $(document).ready(function() {
         targets = []
         for x in header:
             sfx = "<br>(avg. error, km)" if i > 1 else ""
-            f.write("{ title: \"" + x + sfx + "\", \"width\": \"5%%\"}")
-            if (i < len(countries[0]) - 1):
-                f.write(",")
+            f.write("{ title: \"" + x.replace('"','') + sfx + "\", \"width\": \"5%%\"}")
+            if (i < len(header) - 1):
+                f.write(",\n")
             if (i > 2):
                 targets.append(str(i))
 
@@ -816,7 +817,7 @@ header = ""
 with open('./player_countries.csv') as fp:
     for cnt, line in enumerate(fp):
         if (cnt < 1):
-            header = line.replace("[","").replace("]","").split(",")
+            header = line.replace("[","").replace("]","").replace("\n","").split(",")
         else:
             sorted_countries.append(line)
         # if ("Total" in line.split(',')[0]):
