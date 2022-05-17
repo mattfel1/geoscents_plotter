@@ -837,9 +837,9 @@ color_idx = 0
 dpi = 250
 timestep = 0.2
 
+initCount() 
 
 for path in pathlist:
-    initCount() 
     
     # because path is object not string
     file = str(path)
