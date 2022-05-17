@@ -482,7 +482,7 @@ def initCount():
     with open(outdir_prefix + "/plots/counts.js", 'w+') as f:
         f.write("")
 
-def writeCount(count):
+def writeCount(continent, count):
     with open(outdir_prefix + "/plots/counts.js", 'a') as f:
         f.write("\ndocument.getElementById(\"" + continent + "_count\").innerHTML = \"(" + str(count) + " clicks)\";")
 
@@ -846,7 +846,7 @@ for path in pathlist:
     continent = file.split('/')[-1].replace('.json','')
     continent_count = 0
     print(file)
-    continent_map = mpimg.imread('./' + continent.lower() + '_terrain.png')
+    continent_map = mpimg.imread('/home/mattfel/geoscents/resources/maps/' + continent.lower() + '_terrain.png')
     writeHtml(continent, header[2:-1])
     initJs(continent) 
    
@@ -991,7 +991,7 @@ for path in pathlist:
 
 
         # Report total count for continent and make continent aggregate map
-        writeCount(continent_count)
+        writeCount(continent, continent_count)
         plt.figure(figsize=(MAP_WIDTH/dpi, MAP_HEIGHT/dpi), dpi=dpi)
         plt.imshow(continent_map)
         ax = plt.gca()
