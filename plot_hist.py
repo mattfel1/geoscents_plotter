@@ -361,7 +361,7 @@ $(document).ready(function() {
 } );
 
 var dataSet = [
-""" % (continent, continent, continent))
+""" % (continent.replace(" ","_").replace(".","_"), continent, continent))
 
 def writeIndex(header, countries):
     with open(outdir_prefix + "/plots/index.html", 'w+') as f:
@@ -626,7 +626,7 @@ def writeHtml(continent, cols):
 </body>
 </html>
 
-""" % (continent,continent,continent, update_stamp, continent, continent, continent))
+""" % (continent,continent,continent, update_stamp, continent.replace(" ","_").replace(".","_"), continent, continent))
 
 def initAnim(fname, stepsize, flag):
     with open(outdir_prefix + "/plots/" + fname + '.js', 'w+') as f:
