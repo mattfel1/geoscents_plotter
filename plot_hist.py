@@ -351,6 +351,7 @@ $(document).ready(function() {
         $("#all").css("background","#a9e7f9");
         table.columns(0).search("Entry").draw();
     });
+    // Hijack ctrl+f to jump to filter bar
     $(window).keydown(function(e){
         if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
             e.preventDefault();
@@ -783,7 +784,7 @@ var layout = {
       steps: sliderSteps
     }]
     };
-frames = [""" % (','.join([x.replace(' ','') + str(maxframe) for x in sorted(countries)]), continent, title, stepsize * 1000))
+frames = [""" % (','.join([x.replace(' ','') + str(maxframe) for x in sorted(countries)]), continent.lower().replace(" ", "").replace(".", ""), title, stepsize * 1000))
         for i in range(0,maxframe+1):
             # f.write("""{data: [truth,average,%s], name: "frame%d"},
             f.write("""{data: [truth,%s], name: "frame%d"},
