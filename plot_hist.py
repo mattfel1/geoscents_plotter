@@ -1038,7 +1038,7 @@ for path in pathlist:
                     std_dist = np.std(dist_data)
                     outliers = [x for x in dist_data if x - mean_dist > 3 * std_dist]
                     inliers = [x for x in dist_data if x - mean_dist <= 3 * std_dist]
-                    if (len(inliers) == 0);
+                    if (len(inliers) == 0):
                         inliers = [1]
                     bins = plt.hist(inliers, bins=20)
                     x = np.linspace(0,max(inliers),100)
