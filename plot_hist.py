@@ -20,11 +20,17 @@ import glob
 from time import gmtime, strftime
 import time
 
+
+import warnings
+warnings.filterwarnings("ignore")
+
+
 update_stamp = time.strftime("%a, %b %d %Y @ %I:%M %p %Z", time.gmtime())
 MAP_WIDTH = 1530
 MAP_HEIGHT = 900
 outdir_prefix = '/home/mattfel/'
 generate_gifs = True
+verbose = False
 
 def geoToMerc(room,lat,lon):
     # Copy from geoscents resources/constants.js
@@ -263,6 +269,9 @@ def geoToMerc(room,lat,lon):
         }
         
     }
+    if (room not in MAP_BOUNDS):
+        return 0, 0
+
     zero_lat = MAP_BOUNDS[room]["min_lat"]
     max_lat = MAP_BOUNDS[room]["max_lat"]
     min_lon = MAP_BOUNDS[room]["min_lon"]
@@ -483,6 +492,7 @@ def initCount():
         f.write("")
 
 def writeCount(continent, count):
+    print("write count for " + continent)
     with open(outdir_prefix + "/plots/counts.js", 'a') as f:
         f.write("\ndocument.getElementById(\"" + continent + "_count\").innerHTML = \"(" + str(count) + " clicks)\";")
 
@@ -846,7 +856,7 @@ for path in pathlist:
     continent = file.split('/')[-1].replace('.json','')
     continent_count = 0
     print(file)
-    continent_map = mpimg.imread('/home/mattfel/geoscents/resources/maps/' + continent.lower() + '_terrain.png')
+    continent_map = mpimg.imread('/home/mattfel/geoscents/resources/maps/' + continent.lower().replace(" ", "").replace(".", "") + '_terrain.png')
     writeHtml(continent, header[2:-1])
     initJs(continent) 
    
@@ -865,7 +875,8 @@ for path in pathlist:
         entry_id = 0
         for entry in data:
             # if (entry_id == 5): break # early quit
-            print('%s: (%d / %d): %s' % (continent, entry_id, len(data), entry))
+            if (verbose):
+                print('%s: (%d / %d): %s' % (continent, entry_id, len(data), entry))
             entry_id = entry_id + 1
             # Create entry for this city
             try:
@@ -884,11 +895,14 @@ for path in pathlist:
                     aggregate_dists[aggregate_name] = aggregate_dists[aggregate_name] + dist_data
                 else:
                     aggregate_dists[aggregate_name] = dist_data
-                mean_dist = data[entry]['mean_dist']
-                std_dist = data[entry]['std_dist']
+                mean_dist = data[entry]['mean_dist'] if 'mean_dist' in data[entry] else 0
+                std_dist = data[entry]['std_dist'] if 'std_dist' in data[entry] else 0
                 outliers = [x for x in dist_data if x - mean_dist > 3 * std_dist]
                 inliers = [x for x in dist_data if x - mean_dist <= 3 * std_dist]
-                x = np.linspace(0,max(inliers),100)
+                if (len(inliers) == 0):
+                    inliers = [0]
+                max_inlier = max(inliers)
+                x = np.linspace(0,max_inlier,100)
                 bins = plt.hist(inliers, bins=20)
                 fit = stats.norm.pdf(x, mean_dist, std_dist)
                 # Generate hist
@@ -896,8 +910,9 @@ for path in pathlist:
                 plt.title(entry)
                 plt.xlabel('Error in km (%d outliers omitted)' % len(outliers))
                 plt.ylabel('# of players')
-                plt.xlim([0,max(inliers)])
-                fname = 'entry_' + continent + '_' + data[entry]['country'] + '_' + entry + '.jpg'
+                plt.xlim([0,max_inlier])
+                fname_country = data[entry]['country'] if 'country' in data[entry] else 'unk_country'
+                fname = 'entry_' + continent + '_' + fname_country + '_' + entry + '.jpg'
                 fname = stripSpecial(fname.replace(' ','-').replace('/','-'))
                 plt.savefig(outdir_prefix + '/plots/' + fname)
                 plt.clf()
@@ -927,7 +942,7 @@ for path in pathlist:
                     plt.close()
 
                 initAnim(anim_name, timestep, bigflag)
-                true_x, true_y = (0,0) if "true_lat" not in data[entry] else geoToMerc(continent, data[entry]["true_lat"], data[entry]["true_lon"]) 
+                true_x, true_y = (0,0) if ("true_lat" not in data[entry] or "true_lon" not in data[entry]) else geoToMerc(continent, data[entry]["true_lat"], data[entry]["true_lon"]) 
                 addFrame(anim_name, "truth", "truth", 1, [true_x], [900 - true_y], 'size: 9, symbol: \'star-open\', color: \'black\'')
                 continentTrueXs.append(true_x)
                 continentTrueYs.append(true_y)
@@ -1008,7 +1023,8 @@ for path in pathlist:
         if (continent != "Trivia"): 
             entry_id = 0
             for aggregate_name in aggregate_dists:
-                print('%s: (%d / %d): %s' % (continent, entry_id, len(aggregate_dists), aggregate_name))
+                if (verbose):
+                    print('%s: (%d / %d): %s' % (continent, entry_id, len(aggregate_dists), aggregate_name))
                 entry_id = entry_id + 1
                 try:
                     if (aggregate_name in admin_to_country):
@@ -1022,6 +1038,8 @@ for path in pathlist:
                     std_dist = np.std(dist_data)
                     outliers = [x for x in dist_data if x - mean_dist > 3 * std_dist]
                     inliers = [x for x in dist_data if x - mean_dist <= 3 * std_dist]
+                    if (len(inliers) == 0);
+                        inliers = [1]
                     bins = plt.hist(inliers, bins=20)
                     x = np.linspace(0,max(inliers),100)
                     fit = stats.norm.pdf(x, mean_dist, std_dist)
