@@ -849,6 +849,8 @@ timestep = 0.2
 
 initCount() 
 
+errors = []
+
 for path in pathlist:
     
     # because path is object not string
@@ -928,7 +930,8 @@ for path in pathlist:
                 reghist = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (fname, fname)
                 anim = '<a href=\\"%s\\"><img src=\\"%s\\" class=\\"img-thumbnail\\" alt=\\"link\\" height=40px></a>' % (anim_name + '.html', continent + '.jpg')
                 link = "https://en.wikipedia.org/wiki/Special:Search?search=" + stripSpecial(entry) + "&go=Go&ns0=1" if ('wiki' not in data[entry]) else data[entry]['wiki']
-                linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, data[entry]['city']) 
+                linkedCity = data[entry]['city'] if 'city' in data[entry] else "unknown_city"
+                linkedEntry = '<a href=\\"%s\\">%s</a>' % (link, linkedCity) 
                 flag = " " if (iso2 == 'NONE') else '<img src=\\"flags/%s.png\\" class=\\"img-thumbnail\\" style=\\"border:1px solid black;\\" alt=\\"%s\\" height=20px>' % (iso2.lower(), iso2.lower())
                 bigflag = " " if (iso2.lower() == 'none') else '<img src="flags/%s.png" style="border:1px solid black;display:block;margin:0 auto" class="img-thumbnail" height=40px>' % iso2.lower()
                 addJs('"Entry","' + flag + '","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
@@ -998,6 +1001,7 @@ for path in pathlist:
 
 
             except Exception as e: # work on python 3.x
+                errors.append("problem with entry " + entry + " in " + continent)
                 exc_type, exc_obj, exc_tb = sys.exc_info()
                 fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                 print(exc_type, fname, exc_tb.tb_lineno)
@@ -1109,6 +1113,7 @@ for path in pathlist:
 
                             
                 except Exception as e: # work on python 3.x
+                    errors.append("problem with aggregate " + aggregate + " in " + continent)
                     exc_type, exc_obj, exc_tb = sys.exc_info()
                     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                     print(exc_type, fname, exc_tb.tb_lineno)
@@ -1118,5 +1123,7 @@ for path in pathlist:
 
 
     finishJs(continent)
+    for x in errors:
+        print(x)
             
         
