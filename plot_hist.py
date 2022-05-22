@@ -729,7 +729,7 @@ var layout = {
   height: 900,
   images: [
       {
-        "source": "https://geoscents.net/resources/maps/%s.png",
+        "source": "https://geoscents.net/resources/maps/%s_terrain.png",
         "xref": "x",
         "yref": "y",
         "x": 0,
@@ -938,13 +938,15 @@ for path in pathlist:
                 bigflag = " " if (iso2.lower() == 'none') else '<img src="flags/%s.png" style="border:1px solid black;display:block;margin:0 auto" class="img-thumbnail" height=40px>' % iso2.lower()
                 addJs('"Entry","' + flag + '","' + country + '","' + admin + '","' + linkedEntry + '","' + '%.1f' % mean_dist + '","' + '%.1f' % std_dist + '","' + str(len(dist_data)) + '","' + reghist + '","' + anim + '"')
 
-                if (entry_id == 1):
-                    plt.figure(figsize=(MAP_WIDTH/dpi, MAP_HEIGHT/dpi), dpi=dpi)
-                    plt.imshow(continent_map)
-                    plt.axis('off')
-                    plt.savefig(outdir_prefix + '/plots/' + continent + '.jpg')
-                    plt.clf()
-                    plt.close()
+                # Source image from game resources/maps now, so no need to copy here?
+
+                # if (entry_id == 1):
+                #     plt.figure(figsize=(MAP_WIDTH/dpi, MAP_HEIGHT/dpi), dpi=dpi)
+                #     plt.imshow(continent_map)
+                #     plt.axis('off')
+                #     plt.savefig(outdir_prefix + '/plots/' + continent + '.jpg')
+                #     plt.clf()
+                #     plt.close()
 
                 initAnim(anim_name, timestep, bigflag)
                 true_x, true_y = (0,0) if ("true_lat" not in data[entry] or "true_lon" not in data[entry]) else geoToMerc(continent, data[entry]["true_lat"], data[entry]["true_lon"]) 
@@ -1013,6 +1015,7 @@ for path in pathlist:
 
         # Report total count for continent and make continent aggregate map
         writeCount(continent, continent_count)
+        plt.clf()
         plt.figure(figsize=(MAP_WIDTH/dpi, MAP_HEIGHT/dpi), dpi=dpi)
         plt.imshow(continent_map)
         ax = plt.gca()
@@ -1024,6 +1027,7 @@ for path in pathlist:
             x,y = continentTrueXs[i], continentTrueYs[i]
             plt.scatter([x], [y], marker='*', color='w', s = 20, edgecolors = 'black')
         plt.savefig(outdir_prefix + '/plots/all_' + continent + ".jpg")
+        plt.clf()
 
         # Add aggregate for each country
         if (continent != "Trivia"): 
