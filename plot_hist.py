@@ -39,8 +39,8 @@ def geoToMerc(room,lat,lon):
         "World": {
             "min_lon": -180,
             "max_lon": 180,
-            "max_lat": -65.5, // Bottom edge of map (max row pixel coordinate)
-            "min_lat": 77.2, // Top edge of map (min row pixel coordinate)
+            "max_lat": -65.5,
+            "min_lat": 77.2,
             "lat_ts": 0
         },
         "World Capitals": {
