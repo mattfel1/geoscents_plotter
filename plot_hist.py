@@ -39,8 +39,8 @@ def geoToMerc(room,lat,lon):
         "World": {
             "min_lon": -180,
             "max_lon": 180,
-            "max_lat": -65.5,
-            "min_lat": 77.2,
+            "max_lat": -65.5, // Bottom edge of map (max row pixel coordinate)
+            "min_lat": 77.2, // Top edge of map (min row pixel coordinate)
             "lat_ts": 0
         },
         "World Capitals": {
@@ -95,7 +95,7 @@ def geoToMerc(room,lat,lon):
         "Oceania": {
             "min_lon": 92,
             "max_lon": 252,
-            "max_lat": -54.5,
+            "max_lat": -54.55,
             "min_lat": 28,
             "lat_ts": 0
         },
@@ -263,11 +263,32 @@ def geoToMerc(room,lat,lon):
         "Vatican City": {
             "min_lon": 12.440,
             "max_lon": 12.4605,
-            "max_lat": 41.899, 
+            "max_lat": 41.899,
             "min_lat": 41.908,
             "lat_ts": 0
+        },
+        "Pakistan": {
+            "min_lon": 52.25,
+            "max_lon": 84,
+            "max_lat": 23,
+            "min_lat": 39,
+            "lat_ts": 0
+        },
+        "Democratic Republic of the Congo": {
+            "min_lon": 3.53,
+            "max_lon": 41,
+            "max_lat": -14,
+            "min_lat": 8,
+            "lat_ts": 0
+        },
+        "New Zealand": {
+            "min_lon": 151,
+            "max_lon": 190.4,
+            "max_lat": -49,
+            "min_lat": -31.4,
+            "lat_ts": 0
         }
-        
+
     }
     if (room not in MAP_BOUNDS):
         return 0, 0
@@ -352,13 +373,13 @@ $(document).ready(function() {
         table.columns(0).search("Entry").draw();
     });
     // Hijack ctrl+f to jump to filter bar
-    $(window).keydown(function(e){
-        if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
-            e.preventDefault();
-            $('#%s_filter input').focus();
-            $('#%s_filter input').select();
-        }
-    });
+    // $(window).keydown(function(e){
+    //     if ((e.ctrlKey || e.metaKey) && e.keyCode === 70) {
+    //         e.preventDefault();
+    //         $('#%s_filter input').focus();
+    //         $('#%s_filter input').select();
+    //     }
+    // });
 } );
 
 var dataSet = [
