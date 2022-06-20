@@ -9,11 +9,11 @@
 #done
 #scp /home/mattfel/plots/*gif geoscents.net:~/plots/
 
-rsync --bwlimit=50000 -avzh /home/mattfel/plots/flags/* geoscents.net:~/plots/flags/
-rsync --bwlimit=50000 -avzh /home/mattfel/plots/*js geoscents.net:~/plots/
-rsync --bwlimit=50000 -avzh /home/mattfel/plots/*html geoscents.net:~/plots/
-rsync --bwlimit=50000 -avzh /home/mattfel/plots/*css geoscents.net:~/plots/
-rsync --bwlimit=50000 -avzh /home/mattfel/plots/*jpg geoscents.net:~/plots/
-rsync --bwlimit=50000 -avzh /home/mattfel/plots/growth.png geoscents.net:~/plots/
+rsync --bwlimit=50000 -avzh /home/mattfel/plots/flags/* root@geoscents.net:~/plots/flags/
+rsync --bwlimit=50000 -avzh /home/mattfel/plots/*js root@geoscents.net:~/plots/
+rsync --bwlimit=50000 -avzh /home/mattfel/plots/*html root@geoscents.net:~/plots/
+rsync --bwlimit=50000 -avzh /home/mattfel/plots/*css root@geoscents.net:~/plots/
+rsync --bwlimit=50000 -avzh /home/mattfel/plots/*jpg root@geoscents.net:~/plots/
+rsync --bwlimit=50000 -avzh /home/mattfel/plots/growth.png root@geoscents.net:~/plots/
 #rsync --bwlimit=50000 -avzh $1/plots/*gif geoscents.net:~/plots/
 

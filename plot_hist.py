@@ -287,8 +287,28 @@ def geoToMerc(room,lat,lon):
             "max_lat": -49,
             "min_lat": -31.4,
             "lat_ts": 0
+        },
+        "Turkey": {
+            "min_lon": 22,
+            "max_lon": 48,
+            "max_lat": 33.14,
+            "min_lat": 45,
+            "lat_ts": 0
+        },
+        "Switzerland": {
+            "min_lon": 4,
+            "max_lon": 12.66,
+            "max_lat": 45,
+            "min_lat": 48.5,
+            "lat_ts": 0
+        },
+        "Morocco": {
+            "min_lon": -25,
+            "max_lon": 10,
+            "max_lat": 20.03,
+            "min_lat": 38,
+            "lat_ts": 0
         }
-
     }
     if (room not in MAP_BOUNDS):
         return 0, 0
