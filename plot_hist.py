@@ -308,6 +308,34 @@ def geoToMerc(room,lat,lon):
             "max_lat": 20.03,
             "min_lat": 38,
             "lat_ts": 0
+        },
+        "Philippines": {
+            "min_lon": 105,
+            "max_lon": 140,
+            "max_lat": 2,
+            "min_lat": 22.15,
+            "lat_ts": 0
+        },
+        "Vietnam": {
+            "min_lon": 90,
+            "max_lon": 120.1,
+            "max_lat": 8,
+            "min_lat": 25,
+            "lat_ts": 0
+        },
+        "South Korea": {
+            "min_lon": 121,
+            "max_lon": 135.75,
+            "max_lat": 33,
+            "min_lat": 40,
+            "lat_ts": 0
+        },
+        "Saudi Arabia": {
+            "min_lon": 23.8,
+            "max_lon": 63.5,
+            "max_lat": 15,
+            "min_lat": 36,
+            "lat_ts": 0
         }
     }
     if (room not in MAP_BOUNDS):
